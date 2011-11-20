@@ -12,7 +12,7 @@ class Hello(Resource):
 			
 	def render_GET(self, req):
 		d = Deferred()
-		reactor.callLater(10, d.callback, None)
+		reactor.callLater(0, d.callback, None)
 		d.addCallback(lambda _: self.say_hi(req))
 		return server.NOT_DONE_YET
 	
@@ -33,5 +33,5 @@ class Hello2(Resource):
 		
 root = Hello()
 root.putChild("2", Hello2())
-reactor.listenTCP(8080, server.Site(root))
+reactor.listenTCP(8081, server.Site(root))
 reactor.run()
