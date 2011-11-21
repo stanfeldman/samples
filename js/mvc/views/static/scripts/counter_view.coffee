@@ -1,21 +1,18 @@
-require ["/scripts/helper.c.js"], ->
-class CounterView
-	constructor: (opts) ->
-		@helper = new Helper()
-		@id = @helper.guid()
-		@controller = opts.controller
-		@controller.bind "change", @on_change
+require ["/scripts/bony/view.c.js"], ->
+	class CounterButtonView extends bony.View
+		init: (opts) =>
+			@controller.bind "update", @on_update
 		
-	render: ->
-		elm = $("<button class='#{@id}'>#{@controller.get "value"}</button>")
-		elm.click =>
-			@controller.set "value", 1+@controller.get "value"
-		return elm
+		render: (model)->
+			model ?= @controller.read()
+			elm = $("<button class='#{@id}'>#{model.value}</button>")
+			elm.click =>
+				@controller.update {"value": model.value + 1}
+			return elm
 		
-	on_change: (params) =>
-		console.log params
-		$("button.#{@id}").replaceWith =>
-			@render()
+		on_update: (event, model) =>
+			$("button.#{@id}").replaceWith =>
+				@render(model)
 			
-exports = this
-exports.CounterView = CounterView
+	exports = this
+	exports.CounterButtonView = CounterButtonView

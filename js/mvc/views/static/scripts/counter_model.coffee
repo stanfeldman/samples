@@ -1,10 +1,7 @@
-class CounterModel
-	constructor: (@value=1) ->
-	
-	sync: ->
-		for k, v of this when typeof v isnt "function"
-			console.log "k: #{k}, v: #{v}"
+require ["/scripts/bony/model.c.js"], ->
+	class CounterModel extends bony.Model
+		constructor: (@value=1) ->
 
-exports = this
-exports.CounterModel = CounterModel
+	exports = this
+	exports.CounterModel = CounterModel
 				

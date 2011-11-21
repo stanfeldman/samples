@@ -11,5 +11,15 @@ class Helper
 			(((1+Math.random())*0x10000)|0).toString(16).substring(1)
 		S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4()
 		
+class View
+	constructor: (opts) ->
+		@helper = new Helper()
+		@id = @helper.guid()
+		@controller = opts.controller
+		@init(opts)
+			
+	init: (opts) ->
+			
 exports = this
-exports.Helper = Helper
+exports.bony ?= {}
+exports.bony.View = View
