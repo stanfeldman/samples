@@ -1,17 +1,26 @@
 class CounterController
 	constructor: (opts) ->
 		@model = opts.model
-		@observers = []
+		@observers = {}
 		
-	value: () ->
-		@model.value
+	get: (attr) ->
+		@model[attr]
 	
-	increase: (v) ->
-		@model.increase v
-		@notify_observers()
+	set: (attr, value) ->
+		old = @model[attr]
+		@model[attr] = value
+		@notify("change", {event: "change", key: attr, old_value: old, new_value: value})
+		@model.sync()
 		
-	notify_observers: ->
-		o.notify(this) for o in @observers
+	bind: (event, action) ->
+		@observers[event] = action
+		
+	unbind: (action) ->
+		#@observers.remove observer
+		
+	notify: (event, params)->
+		@observers[event](params)
+			
 		
 exports = this
 exports.CounterController = CounterController

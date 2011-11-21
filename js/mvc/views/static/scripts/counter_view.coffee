@@ -1,16 +1,19 @@
+require ["/scripts/helper.c.js"], ->
 class CounterView
 	constructor: (opts) ->
-		@id = Math.floor Math.random()*10000
+		@helper = new Helper()
+		@id = @helper.guid()
 		@controller = opts.controller
-		@controller.observers.push this
+		@controller.bind "change", @on_change
 		
 	render: ->
-		elm = $("<button class='#{@id}'>#{@controller.value()}</button>")
+		elm = $("<button class='#{@id}'>#{@controller.get "value"}</button>")
 		elm.click =>
-			@controller.increase(1)
+			@controller.set "value", 1+@controller.get "value"
 		return elm
 		
-	notify: ->
+	on_change: (params) =>
+		console.log params
 		$("button.#{@id}").replaceWith =>
 			@render()
 			
