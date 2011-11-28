@@ -6,13 +6,13 @@ cursor = conn.cursor()
 time2 = time.time()
 print "connect time: %s" % (time2-time1)
 
-time1 = time.time()
-for i in xrange(0, 1):
-	query = "insert into db_documents(db_title, db_body) values('%s', '%s')" % ("title %s" % i, "body %s" % i)
-	cursor.execute(query)
-conn.commit()
-time2 = time.time()
-print "insert time: %s" % (time2-time1)
+#time1 = time.time()
+#for i in xrange(0, 1):
+#	query = "insert into db_documents(db_title, db_body) values('%s', '%s')" % ("title %s" % i, "body %s" % i)
+#	cursor.execute(query)
+#conn.commit()
+#time2 = time.time()
+#print "insert time: %s" % (time2-time1)
 
 time1 = time.time()
 query = "select * from db_documents"
