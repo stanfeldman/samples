@@ -1,24 +1,20 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>Тег UL</title>
+		<title>Unzipper</title>
 		<style>
 			ul {list-style-type: square;}
 		</style>
 	</head>
 	<body>
 		<form method="post" enctype="multipart/form-data">
-			File to upload: <input type="file" name="zipfile"><br/>
+			Загрузите zip архив: <input type="file" name="zipfile"><br/>
 			<input type="submit" value="Submit">
 		</form>
-		<ul>
-			<li>item1</li>
-			<li>item2</li>
-				<ul>
-					<li>item21</li>
-					<li>item22</li>
-				</ul>
-			<li>item3</li>
-		</ul>
+		{% if files %}
+			{% for file in files %}
+				<div>{{ file }}</div>
+			{% endfor %}
+		{% endif %}
 	</body>
 </html>
