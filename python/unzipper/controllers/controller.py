@@ -1,5 +1,5 @@
 from kiss.views.templates import TemplateResponse
-import os
+import os,cgi
 from zipfile import *
 		
 class Controller(object):
@@ -10,8 +10,14 @@ class Controller(object):
 		return TemplateResponse("view.html")
 	
 	def post(self, request):
-		file_input = request.env["wsgi.input"]
-		data = file_input.read(-1)
+		#file_input = request.env["wsgi.input"]
+		form = cgi.FieldStorage()
+		for k in form:
+			print k
+		file_input = form["zipfile"]
+		print file_input
+		#print request.env
+		data = file_input.file.read()
 		print len(data)
 		with open("./test.zip", 'r') as orig_file:
 			print len(orig_file.read())
