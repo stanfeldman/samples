@@ -1,5 +1,7 @@
 from kiss.views.templates import TemplateResponse
 import os,cgi
+from kiss.views.base import Response
+import os
 from zipfile import *
 		
 class Controller(object):
