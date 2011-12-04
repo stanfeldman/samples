@@ -1,8 +1,7 @@
-import time, psycopg2, MySQLdb
+import time, psycopg2
 
 driver_map = {
-	"postgres": psycopg2,
-	"mysql": MySQLdb
+	"postgres": psycopg2
 }
 
 type_map = {
