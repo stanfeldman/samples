@@ -20,8 +20,6 @@ class Parser(object):
 	@abstractproperty
 	def tokens(self):
 		pass
-		
-	t_ignore = " \t"
 	
 	def t_error(self, t):
 		print "Неправильный символ %s" % t
@@ -47,11 +45,11 @@ class Interpreter(Parser):
 		"number",
 		"plus",
 		"minus",
-		"times",
+		"mult",
 		"div",
 		"lparen",
 		"rparen",
-		"endline",
+		"newline",
 		"print",
 		"if",
 		"then",
@@ -60,17 +58,23 @@ class Interpreter(Parser):
 		"gt",
 		"eq",
 		"string",
+		"def",
+		"colon",
+		"return",
+		"space",
+		"comma",
+		"indent",
+		"dedent",
 	)
 	
 	t_name = ur"\w+"
 	t_assign = ur"="
 	t_plus = ur"\+"
 	t_minus = ur"-"
-	t_times = ur"\*"
+	t_mult = ur"\*"
 	t_div = ur"/"
 	t_lparen = ur"\("
 	t_rparen = ur"\)"
-	t_endline = ur"\n"
 	t_print = ur"print"
 	t_if = ur"if"
 	t_then = ur"then"
@@ -79,6 +83,24 @@ class Interpreter(Parser):
 	t_gt = ur">"
 	t_eq = ur"=="
 	t_string = ur'".*?"'
+	t_def = ur"def"
+	t_colon = ur":"
+	t_return = ur"return"
+	t_comma = ur","
+	
+	def t_comment(self, t):
+		r"[ ]*\043[^\n]*"  # \043 is '#'
+		pass
+		
+	def t_space(self, t):
+		r' [ ]+ '
+		#if t.lexer.at_line_start:
+		#return t
+		
+	def t_newline(self, t):
+		ur"\n+"
+		t.lexer.lineno += len(t.value)
+		t.type = "newline"
 		
 	def t_number(self, t):
 		ur'[0-9]+\.?[0-9]*'
@@ -91,11 +113,11 @@ class Interpreter(Parser):
 	"""
 	Синтаксический анализатор
 	"""
-	def p_file_input(self, p):
-		"""file_input	:	file_input endline
-						|	file_input statement
-						|	endline
-						|	statement"""
+	def p_program(self, p):
+		"""program	:	program newline
+					|	program statement
+					|	newline
+					|	statement"""
 		pass
 	
 	def p_statement_condition(self, p):
@@ -132,8 +154,8 @@ class Interpreter(Parser):
 		"expression : term"
 		p[0] = p[1]
 		
-	def p_term_times(self, p):
-		"term : term times factor"
+	def p_term_mult(self, p):
+		"term : term mult factor"
 		p[0] = p[1] * p[3]
 		
 	def p_term_div(self, p):
@@ -170,7 +192,7 @@ class Interpreter(Parser):
 		
 	def p_factor_string(self, p):
 		"factor : string"
-		p[0] = p[1][1:len(p[1])-1]
+		p[0] = p[1][1:-1]
 		
 	def p_factor_expression(self, p):
 		"factor : lparen expression rparen"
