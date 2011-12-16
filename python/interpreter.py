@@ -24,7 +24,7 @@ class Parser(object):
 	t_ignore = " \t"
 	
 	def t_error(self, t):
-		print "Неправильный символ %s" % t.value
+		print "Неправильный символ %s" % t
 		t.lexer.skip(1)
 		
 	def parse(self, input):
@@ -43,7 +43,7 @@ class Interpreter(Parser):
 	
 	tokens = (
 		"name",
-		"eq",
+		"assign",
 		"number",
 		"plus",
 		"minus",
@@ -52,11 +52,18 @@ class Interpreter(Parser):
 		"lparen",
 		"rparen",
 		"endline",
-		"print"
+		"print",
+		"if",
+		"then",
+		"else",
+		"lt",
+		"gt",
+		"eq",
+		"string",
 	)
 	
 	t_name = ur"\w+"
-	t_eq = ur"="
+	t_assign = ur"="
 	t_plus = ur"\+"
 	t_minus = ur"-"
 	t_times = ur"\*"
@@ -65,44 +72,53 @@ class Interpreter(Parser):
 	t_rparen = ur"\)"
 	t_endline = ur"\n"
 	t_print = ur"print"
+	t_if = ur"if"
+	t_then = ur"then"
+	t_else = ur"else"
+	t_lt = ur"<"
+	t_gt = ur">"
+	t_eq = ur"=="
+	t_string = ur'".*?"'
 		
 	def t_number(self, t):
-		ur"\d+"
-		t.value = int(t.value)
+		ur'[0-9]+\.?[0-9]*'
+		try:
+			t.value = int(t.value)
+		except:
+			t.value = float(t.value)
 		return t
 		
 	"""
 	Синтаксический анализатор
-	БНФ:
-	file_input	:	file_input endline
-				|	file_input statement
-				|	endline
-				|	statement
-	statement	:	name eq expression
-				|	print lparen expression rparen
-	expression	:	expression plus term
-				|	expression minus term
-				|	term
-	term		:	term times factor
-				|	term div factor
-				|	factor
-	factor		:	name
-				|	number
-				|	lparen expression rparen
 	"""
 	def p_file_input(self, p):
 		"""file_input	:	file_input endline
 						|	file_input statement
 						|	endline
 						|	statement"""
+		pass
 	
-	def p_statement_eq(self, p):
-		"statement : name eq expression"
+	def p_statement_condition(self, p):
+		"""statement	:	condition_statement
+						|	exp_statement"""
+		pass
+						
+	def p_condition(self, p):
+		"condition_statement : if expression then statement"
+		#if p[2]:
+		#	p[0] = 555
+		pass
+			
+	def p_exp_statement_assign(self, p):
+		"exp_statement : name assign expression"
 		self.names[p[1]] = p[3]
 	
-	def p_statement_expression(self, p):
-		"statement : print lparen expression rparen"
+	def p_exp_statement_print(self, p):
+		"exp_statement : print lparen expression rparen"
 		print p[3]
+		
+	def p_statement(self, p):
+		"exp_statement : expression"
 		
 	def p_expression_plus(self, p):
 		"expression : expression plus term"
@@ -123,6 +139,18 @@ class Interpreter(Parser):
 	def p_term_div(self, p):
 		"term : term div factor"
 		p[0] = p[1] / p[3]
+		
+	def p_term_lt(self, p):
+		"term : term lt factor"
+		p[0] = p[1] < p[3]
+		
+	def p_term_gt(self, p):
+		"term : term gt factor"
+		p[0] = p[1] > p[3]
+		
+	def p_term_eq(self, p):
+		"term : term eq factor"
+		p[0] = p[1] == p[3]
 	
 	def p_term_factor(self, p):
 		"term : factor"
@@ -133,19 +161,23 @@ class Interpreter(Parser):
 		try:
 			p[0] = self.names[p[1]]
 		except:
-			print "Неизвестная переменная %s" % p[1]
+			print u"Неизвестная переменная %s" % p[1]
 			p[0] = 0
 	
 	def p_factor_number(self, p):
 		"factor : number"
 		p[0] = p[1]
 		
+	def p_factor_string(self, p):
+		"factor : string"
+		p[0] = p[1][1:len(p[1])-1]
+		
 	def p_factor_expression(self, p):
 		"factor : lparen expression rparen"
 		p[0] = p[2]
 		
 	def p_error(self, p):
-		print "Неверный синаксис %s" % p.value
+		print u"Неверный синтаксис %s" % p
 	
 	def run(self, code):
 		self.parse(unicode(code.strip()))
