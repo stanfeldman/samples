@@ -1,0 +1,25 @@
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+<beans>
+	<bean id="j" class="Juggler">
+		<constructor-arg value="555"/>
+	</bean>
+	<bean id="s" class="Sonnet"/>
+	<bean id="pj" class="PoeticJuggler">
+		<constructor-arg ref="s"/>
+		<constructor-arg value="777"/>
+	</bean>
+	<bean id="sax" class="Saxophone"/>
+	<bean id="it" class="Instrumentalist">
+		<property name="instrument" ref="sax"/>
+		<property name="song" value="Jingle Bells"/>
+	</bean>
+	<bean id="omb" class="OneManBand">
+		<property name="instruments">
+			<list>
+				<ref bean="sax"/>
+				<bean class="Guitar"/>
+			</list>
+		</property>
+	</bean>
+</beans>
