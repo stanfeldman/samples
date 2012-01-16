@@ -1,0 +1,341 @@
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> statement
+Rule 1     statement -> variable eq expression
+Rule 2     statement -> expression
+Rule 3     statement -> newline
+Rule 4     expression -> expression plus term
+Rule 5     expression -> expression minus term
+Rule 6     expression -> term
+Rule 7     term -> term times factor
+Rule 8     term -> term div factor
+Rule 9     term -> factor
+Rule 10    factor -> variable
+Rule 11    factor -> number
+Rule 12    factor -> lparen expression rparen
+
+Terminals, with rules where they appear
+
+div                  : 8
+eq                   : 1
+error                : 
+lparen               : 12
+minus                : 5
+newline              : 3
+number               : 11
+plus                 : 4
+rparen               : 12
+times                : 7
+variable             : 1 10
+
+Nonterminals, with rules where they appear
+
+expression           : 1 2 4 5 12
+factor               : 7 8 9
+statement            : 0
+term                 : 4 5 6 7 8
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . statement
+    (1) statement -> . variable eq expression
+    (2) statement -> . expression
+    (3) statement -> . newline
+    (4) expression -> . expression plus term
+    (5) expression -> . expression minus term
+    (6) expression -> . term
+    (7) term -> . term times factor
+    (8) term -> . term div factor
+    (9) term -> . factor
+    (10) factor -> . variable
+    (11) factor -> . number
+    (12) factor -> . lparen expression rparen
+
+    variable        shift and go to state 7
+    newline         shift and go to state 3
+    number          shift and go to state 4
+    lparen          shift and go to state 2
+
+    term                           shift and go to state 1
+    expression                     shift and go to state 8
+    statement                      shift and go to state 5
+    factor                         shift and go to state 6
+
+state 1
+
+    (6) expression -> term .
+    (7) term -> term . times factor
+    (8) term -> term . div factor
+
+    rparen          reduce using rule 6 (expression -> term .)
+    plus            reduce using rule 6 (expression -> term .)
+    minus           reduce using rule 6 (expression -> term .)
+    $end            reduce using rule 6 (expression -> term .)
+    times           shift and go to state 10
+    div             shift and go to state 9
+
+
+state 2
+
+    (12) factor -> lparen . expression rparen
+    (4) expression -> . expression plus term
+    (5) expression -> . expression minus term
+    (6) expression -> . term
+    (7) term -> . term times factor
+    (8) term -> . term div factor
+    (9) term -> . factor
+    (10) factor -> . variable
+    (11) factor -> . number
+    (12) factor -> . lparen expression rparen
+
+    variable        shift and go to state 11
+    number          shift and go to state 4
+    lparen          shift and go to state 2
+
+    term                           shift and go to state 1
+    expression                     shift and go to state 12
+    factor                         shift and go to state 6
+
+state 3
+
+    (3) statement -> newline .
+
+    $end            reduce using rule 3 (statement -> newline .)
+
+
+state 4
+
+    (11) factor -> number .
+
+    times           reduce using rule 11 (factor -> number .)
+    div             reduce using rule 11 (factor -> number .)
+    plus            reduce using rule 11 (factor -> number .)
+    minus           reduce using rule 11 (factor -> number .)
+    $end            reduce using rule 11 (factor -> number .)
+    rparen          reduce using rule 11 (factor -> number .)
+
+
+state 5
+
+    (0) S' -> statement .
+
+
+
+state 6
+
+    (9) term -> factor .
+
+    times           reduce using rule 9 (term -> factor .)
+    div             reduce using rule 9 (term -> factor .)
+    plus            reduce using rule 9 (term -> factor .)
+    minus           reduce using rule 9 (term -> factor .)
+    $end            reduce using rule 9 (term -> factor .)
+    rparen          reduce using rule 9 (term -> factor .)
+
+
+state 7
+
+    (1) statement -> variable . eq expression
+    (10) factor -> variable .
+
+    eq              shift and go to state 13
+    times           reduce using rule 10 (factor -> variable .)
+    div             reduce using rule 10 (factor -> variable .)
+    plus            reduce using rule 10 (factor -> variable .)
+    minus           reduce using rule 10 (factor -> variable .)
+    $end            reduce using rule 10 (factor -> variable .)
+
+
+state 8
+
+    (2) statement -> expression .
+    (4) expression -> expression . plus term
+    (5) expression -> expression . minus term
+
+    $end            reduce using rule 2 (statement -> expression .)
+    plus            shift and go to state 14
+    minus           shift and go to state 15
+
+
+state 9
+
+    (8) term -> term div . factor
+    (10) factor -> . variable
+    (11) factor -> . number
+    (12) factor -> . lparen expression rparen
+
+    variable        shift and go to state 11
+    number          shift and go to state 4
+    lparen          shift and go to state 2
+
+    factor                         shift and go to state 16
+
+state 10
+
+    (7) term -> term times . factor
+    (10) factor -> . variable
+    (11) factor -> . number
+    (12) factor -> . lparen expression rparen
+
+    variable        shift and go to state 11
+    number          shift and go to state 4
+    lparen          shift and go to state 2
+
+    factor                         shift and go to state 17
+
+state 11
+
+    (10) factor -> variable .
+
+    times           reduce using rule 10 (factor -> variable .)
+    div             reduce using rule 10 (factor -> variable .)
+    plus            reduce using rule 10 (factor -> variable .)
+    minus           reduce using rule 10 (factor -> variable .)
+    $end            reduce using rule 10 (factor -> variable .)
+    rparen          reduce using rule 10 (factor -> variable .)
+
+
+state 12
+
+    (12) factor -> lparen expression . rparen
+    (4) expression -> expression . plus term
+    (5) expression -> expression . minus term
+
+    rparen          shift and go to state 18
+    plus            shift and go to state 14
+    minus           shift and go to state 15
+
+
+state 13
+
+    (1) statement -> variable eq . expression
+    (4) expression -> . expression plus term
+    (5) expression -> . expression minus term
+    (6) expression -> . term
+    (7) term -> . term times factor
+    (8) term -> . term div factor
+    (9) term -> . factor
+    (10) factor -> . variable
+    (11) factor -> . number
+    (12) factor -> . lparen expression rparen
+
+    variable        shift and go to state 11
+    number          shift and go to state 4
+    lparen          shift and go to state 2
+
+    term                           shift and go to state 1
+    expression                     shift and go to state 19
+    factor                         shift and go to state 6
+
+state 14
+
+    (4) expression -> expression plus . term
+    (7) term -> . term times factor
+    (8) term -> . term div factor
+    (9) term -> . factor
+    (10) factor -> . variable
+    (11) factor -> . number
+    (12) factor -> . lparen expression rparen
+
+    variable        shift and go to state 11
+    number          shift and go to state 4
+    lparen          shift and go to state 2
+
+    term                           shift and go to state 20
+    factor                         shift and go to state 6
+
+state 15
+
+    (5) expression -> expression minus . term
+    (7) term -> . term times factor
+    (8) term -> . term div factor
+    (9) term -> . factor
+    (10) factor -> . variable
+    (11) factor -> . number
+    (12) factor -> . lparen expression rparen
+
+    variable        shift and go to state 11
+    number          shift and go to state 4
+    lparen          shift and go to state 2
+
+    term                           shift and go to state 21
+    factor                         shift and go to state 6
+
+state 16
+
+    (8) term -> term div factor .
+
+    times           reduce using rule 8 (term -> term div factor .)
+    div             reduce using rule 8 (term -> term div factor .)
+    plus            reduce using rule 8 (term -> term div factor .)
+    minus           reduce using rule 8 (term -> term div factor .)
+    $end            reduce using rule 8 (term -> term div factor .)
+    rparen          reduce using rule 8 (term -> term div factor .)
+
+
+state 17
+
+    (7) term -> term times factor .
+
+    times           reduce using rule 7 (term -> term times factor .)
+    div             reduce using rule 7 (term -> term times factor .)
+    plus            reduce using rule 7 (term -> term times factor .)
+    minus           reduce using rule 7 (term -> term times factor .)
+    $end            reduce using rule 7 (term -> term times factor .)
+    rparen          reduce using rule 7 (term -> term times factor .)
+
+
+state 18
+
+    (12) factor -> lparen expression rparen .
+
+    times           reduce using rule 12 (factor -> lparen expression rparen .)
+    div             reduce using rule 12 (factor -> lparen expression rparen .)
+    plus            reduce using rule 12 (factor -> lparen expression rparen .)
+    minus           reduce using rule 12 (factor -> lparen expression rparen .)
+    $end            reduce using rule 12 (factor -> lparen expression rparen .)
+    rparen          reduce using rule 12 (factor -> lparen expression rparen .)
+
+
+state 19
+
+    (1) statement -> variable eq expression .
+    (4) expression -> expression . plus term
+    (5) expression -> expression . minus term
+
+    $end            reduce using rule 1 (statement -> variable eq expression .)
+    plus            shift and go to state 14
+    minus           shift and go to state 15
+
+
+state 20
+
+    (4) expression -> expression plus term .
+    (7) term -> term . times factor
+    (8) term -> term . div factor
+
+    rparen          reduce using rule 4 (expression -> expression plus term .)
+    plus            reduce using rule 4 (expression -> expression plus term .)
+    minus           reduce using rule 4 (expression -> expression plus term .)
+    $end            reduce using rule 4 (expression -> expression plus term .)
+    times           shift and go to state 10
+    div             shift and go to state 9
+
+
+state 21
+
+    (5) expression -> expression minus term .
+    (7) term -> term . times factor
+    (8) term -> term . div factor
+
+    rparen          reduce using rule 5 (expression -> expression minus term .)
+    plus            reduce using rule 5 (expression -> expression minus term .)
+    minus           reduce using rule 5 (expression -> expression minus term .)
+    $end            reduce using rule 5 (expression -> expression minus term .)
+    times           shift and go to state 10
+    div             shift and go to state 9
+

@@ -13,4 +13,11 @@
 	<bean id="documentJdbcDao" class="DocumentJdbcDao">
 		<property name="template" ref="jdbcTemplate"/>
 	</bean>
+	<bean id="ibatisSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:/ibatis.xml"/>
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	<bean id="documentIbatisDao" class="DocumentIbatisDao">
+		<property name="sqlMapClient" ref="ibatisSqlMapClient"/>
+	</bean>
 </beans>

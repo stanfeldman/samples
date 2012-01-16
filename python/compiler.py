@@ -50,7 +50,8 @@ class FelParser(Parser):
 		"times",
 		"div",
 		"lparen",
-		"rparen"
+		"rparen",
+		"newline"
 	)
 	
 	t_variable = ur"\w+"
@@ -85,13 +86,14 @@ class FelParser(Parser):
 				|	number
 				|	lparen expression rparen
 	"""
-	
+		
 	def p_statement_eq(self, p):
 		"statement : variable eq expression"
 		self.variables[p[1]] = p[3]
 		
 	def p_statement_expression(self, p):
-		"statement : expression"
+		"""statement	:	expression
+						|	newline"""
 		print p[1]
 		
 	def p_expression_plus(self, p):

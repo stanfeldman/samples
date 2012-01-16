@@ -7,7 +7,7 @@ public class DocumentRowMapper implements RowMapper<Document>
 	public Document mapRow(ResultSet rs, int rowNum) throws SQLException
 	{
 		Document doc = new Document();
-		doc.setId(rs.getInt("id"));
+		doc.setId(rs.getLong("id"));
 		doc.setTitle(rs.getString("title"));
 		doc.setBody(rs.getString("body"));
 		return doc;

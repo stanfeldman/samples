@@ -10,6 +10,7 @@ for x in xrange(10):
     print 'fib(%d) = %d' % (x, fib(x))
 
 print "lala"
+console.log("laoweir")
 
 class Class1(object):
     def __init__(self, num):

@@ -1,8 +1,8 @@
 public class Document
 {
-	public int getId() { return this.id; }
+	public Long getId() { return this.id; }
 	
-	public void setId(int id) { this.id = id; }
+	public void setId(Long id) { this.id = id; }
 	
 	public String getBody() { return this.body; }
 	
@@ -12,7 +12,7 @@ public class Document
 	
 	public void setTitle(String title) { this.title = title; }
 	
-	private int id;
+	private Long id;
 	
 	private String body;
 	

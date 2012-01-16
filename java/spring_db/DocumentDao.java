@@ -3,6 +3,6 @@ import java.util.List;
 public interface DocumentDao
 {
 	void save(Document document);
-	Document getById(int id);
+	Document getById(Long id);
 	List<Document> getAll();
 }

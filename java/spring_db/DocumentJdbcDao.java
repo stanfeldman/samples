@@ -8,7 +8,7 @@ public class DocumentJdbcDao implements DocumentDao
 		template.update("insert into documents(title, body) values(?,?)", document.getTitle(), document.getBody());
 	}
 	
-	public Document getById(int id)
+	public Document getById(Long id)
 	{
 		return template.queryForObject("select * from documents where id=?", new Object[]{ id }, new DocumentRowMapper());
 	}

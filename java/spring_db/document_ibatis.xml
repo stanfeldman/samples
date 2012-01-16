@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="Document">
+	<statement id="getById" parameterClass="Long" resultClass="Document">
+		select * from documents where id=#id#;
+	</statement>
+	<statement id="insert" resultClass="Long">
+		insert into documents(title, body) values(#title#, #body#) returning id;
+	</statement>
+	<statement id="update" parameterClass="Document">
+		update documents
+		set title=#title#, body=#body#
+		where id=#id#;
+	</statement>
+	<statement id="getAll" resultClass="Document">
+		select * from documents
+	</statement>
+</sqlMap>
