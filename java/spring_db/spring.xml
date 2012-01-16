@@ -1,0 +1,16 @@
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+<beans>
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver"/>
+		<property name="url" value="jdbc:postgresql://localhost:5432/test"/>
+		<property name="username" value="postgres"/>
+		<property name="password" value="vyjujgbdf"/>
+	</bean>
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	<bean id="documentJdbcDao" class="DocumentJdbcDao">
+		<property name="template" ref="jdbcTemplate"/>
+	</bean>
+</beans>
