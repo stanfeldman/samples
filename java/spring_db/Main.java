@@ -16,7 +16,7 @@ public class Main
 		document.setTitle("updated sup doc");
 		dao.save(document);
 		System.out.println(document.getId());
-		System.out.println(dao.getById(new Long(2)).getTitle());
+		//System.out.println(dao.getById(new Long(2)).getTitle());
 		List<Document> documents = dao.getAll();
 		for(Document doc : documents)
 			System.out.println(doc.getTitle());
