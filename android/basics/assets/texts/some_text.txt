@@ -1,0 +1,10 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# User specific aliases and functions
+export NODE_PATH=/usr/lib/node_modules
+export CLASSPATH="$CLASSPATH:/home/stanislavfeldman/distrs/java_libs/*:/home/stanislavfeldman/glassfish-3.1.1/glassfish/modules/*:/home/stanislavfeldman/glassfish-3.1.1/glassfish/lib/*:/home/stanislavfeldman/glassfish-3.1.1/glassfish/lib/install/applications/jmsra/*:/home/stanislavfeldman/projects/java/uni/src/adapter/*:/home/stanislavfeldman/distrs/spring-framework-3.1/dist/*:/home/stanislavfeldman/distrs/ibatis-2.3.4/lib/*:/home/stanislavfeldman/distrs/junit4.10/*:/home/stanislavfeldman/distrs/tomcat-7/lib/*"
