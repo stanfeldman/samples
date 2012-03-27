@@ -1,0 +1,44 @@
+<!DOCTYPE html> 
+<html>
+	<head>
+		<title>ytranslator</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css" />
+		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
+		<style>
+			body { min-width:400px; }
+		</style>
+		<script>
+			$(document).ready(function() 
+			{
+				$.ajaxSetup({ 
+					scriptCharset: "utf-8" , 
+					contentType: "application/json; charset=utf-8"
+				});
+				$.get("http://suggest-slovari.yandex.ru/suggest-lingvo/", {v: "5", part: "яблоко"}, function(data)
+				{
+					$("#content").append(data);
+					//$("#content").append($(data));
+				}).error(function(jqXHR, textStatus, errorThrown) { $("#content").append(textStatus); });
+				//$("#content").append($("h1","<body><h1>Bum!</h1><div id='content'>dfsf</div></body>").html());
+			});
+		</script>
+	</head>
+	<body>
+		<div id="page" data-role="page" >
+			<div data-role="header">
+				<h1>My Title</h1>
+			</div>
+			<div id="content" data-role="content">
+				<form action="#">
+					<div data-role="fieldcontain">
+						<input type="text" name="word" id="word" value="" placeholder="Word"/>
+					</div>
+					<button type="submit" data-theme="b" name="submit" value="submit">Submit</button>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

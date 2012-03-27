@@ -3,5 +3,7 @@ var http = require("http");
 http.createServer(function(req, res)
 {
 	res.writeHead(200, {"content-type": "text/html"});
-	res.end("<h1>hello!</h1>");
-}).listen(1337);
+	res.write(req.connection.remoteAddress);
+	console.log(req.connection.remoteAddress);
+	res.end();
+}).listen(1337, "0.0.0.0");

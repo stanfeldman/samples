@@ -41,3 +41,4 @@ pip-log.txt
 
 #Translations
 *.mo
+/java/scripts/nbproject/private/
