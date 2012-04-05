@@ -39,5 +39,9 @@ public class MainActivity extends ListActivity
 		}
 	}
 
-	private String samples [] = {"LifeCycle", "SingleTouch", "Key", "Accelerometer", "Assets", "ExternalStorage", "FullScreen", "RenderView", "Shape", "Bitmap", "Font", "SurfaceView"};
+	private String samples [] = {
+			"LifeCycle", "SingleTouch", "Assets", 
+			"ExternalStorage", "RenderView", "Shape", 
+			"Bitmap", "SurfaceView", "Prefs", "Db"
+	};
 }

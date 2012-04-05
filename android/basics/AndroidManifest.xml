@@ -3,7 +3,7 @@
     package="feldman.samples.android"
     android:versionCode="1"
     android:versionName="1.0" >
-    <uses-sdk android:minSdkVersion="8" />
+    <uses-sdk android:minSdkVersion="7" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
         android:icon="@drawable/ic_launcher"
@@ -45,5 +45,16 @@
             android:name=".SurfaceViewActivity"
             android:label="SurfaceView" >
         </activity>
+        <activity 
+            android:name=".PrefsActivity"
+            android:label="Prefs" >
+        </activity>
+        <activity 
+            android:name=".DbActivity"
+            android:label="Db" >
+        </activity>
+        <provider 
+            android:name=".MyContentProvider"
+            android:authorities="feldman.samples.android.MyContentProvider"/>
 	</application>
 </manifest>
