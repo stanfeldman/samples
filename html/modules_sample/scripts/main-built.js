@@ -1,0 +1,1 @@
+define("utils/helper",{from_helper:"hi from helper",func:function(a){return a+555}}),require(["utils/helper"],function(a){console.log(a.from_helper),console.log(a.func(5))}),define("main",function(){})
