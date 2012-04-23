@@ -1,15 +1,14 @@
 from time import time
-from lexer import Lexer
+from lexer2 import Lexer
 
-start_time = time()
-webpage = "This is <b>my</b> webpage!"
+webpage = "<h1>this is<a>my</a>page</h1>"
 tokens_spec = [
-	("langleslash", r"</"),
-	("langle", r"<"),
-	("rangle", r">"),
-	("string", r'\"[^"]*\"'),
-	("word", r"[^ <>]+")
+	("start_tag", r"<[^/]+?>"),
+	("close_tag", r"</[^/]+?>"),
+	("word", r"[^ </>]+")
 ]
 lexer = Lexer(tokens_spec)
+start_time = time()
 print lexer.tokens(webpage)
 print "time: %s ms" % ((time()-start_time)*1000)
+
