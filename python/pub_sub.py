@@ -35,6 +35,6 @@ def consume():
 consumer = Greenlet(consume)
 publisher = Greenlet(publish)
 consumer.start()
-publisher.start()
+#publisher.start()
 print "app started"
 joinall([publisher, consumer])
