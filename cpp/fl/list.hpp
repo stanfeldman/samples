@@ -25,7 +25,7 @@ class List
 		ListIterator<T>* iterator();
 	public:
 		int get_length() { return length; }
-		bool is_empty() { return length > 0; }
+		bool is_empty() { return length == 0; }
 	public:
 		friend class ListIterator<T>;
 	private:

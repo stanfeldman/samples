@@ -1,5 +1,5 @@
 from time import time
-from lexer2 import Lexer
+from lexer import Lexer
 
 webpage = "<h1>this is<a>my</a>page</h1>"
 tokens_spec = [

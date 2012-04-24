@@ -17,10 +17,12 @@ int main()
 	list.print();
 	cout << list.pop() << endl;
 	list.print();*/
-	HashTable<int> ht = HashTable<int>();
+	HashTable<int> ht = HashTable<int>(5);
 	ht.add("hey", 34);
 	ht.add("hellooo", 567);
+	ht.add("zzz", 67);
 	cout << ht.get("hellooo") << endl;
+	ht.print();
 	cout << "prog duration: " << Time::get_current_time() - start_time << " ms" << endl;
 	return 0;
 }

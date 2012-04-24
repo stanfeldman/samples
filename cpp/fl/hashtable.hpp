@@ -11,24 +11,26 @@ template<typename T>
 class HashTable
 {
 	public:
-		HashTable();
+		HashTable(int max_size0);
 		~HashTable();
 		void add(string key, T value);
 		T get(string key);
 		int hash(string input);
+		void print();
+	private:
 		typedef pair<string, T> Item;
-		typedef List<Item>* ItemList;
+		typedef List<Item> ItemList;
 	private:
 		int max_size;
-		ItemList* buffer;
+		ItemList** buffer;
 };
 
 template<typename T>
-HashTable<T>::HashTable(): max_size(1000)
+HashTable<T>::HashTable(int max_size0=1000): max_size(max_size0)
 {
-	buffer = new ItemList[max_size];
+	buffer = new ItemList*[max_size];
 	for(int i = 0; i < max_size; ++i)
-		buffer[i] = new List<Item>();
+		buffer[i] = new ItemList();
 }
 
 template<typename T>
@@ -43,7 +45,7 @@ template<typename T>
 void HashTable<T>::add(string key, T value)
 {
 	int ind = hash(key);
-	ItemList existed = buffer[ind];
+	ItemList* existed = buffer[ind];
 	Item inserted = make_pair(key, value);
 	existed->append(inserted);
 }
@@ -52,10 +54,9 @@ template<typename T>
 T HashTable<T>::get(string key)
 {
 	int ind = hash(key);
-	ItemList found = buffer[ind];
+	ItemList* found = buffer[ind];
 	if(!found->is_empty())
 	{
-		cout << "hey" << endl;
 		ListIterator<Item>* it = found->iterator();
 		while(it->has_next())
 		{
@@ -75,5 +76,25 @@ int HashTable<T>::hash(string input)
 	for(int i = 0; i < input.length(); ++i)
 		res = (int)input[i] + (res << 5) + (res >> 2);
 	return abs(res % max_size);
+}
+
+template<typename T>
+void HashTable<T>::print()
+{
+	for(int i = 0; i < max_size; ++i)
+	{
+		ItemList* il = buffer[i];
+		ListIterator<Item>* it = il->iterator();
+		if(it->has_next())
+			cout << i << ":: ";
+		while(it->has_next())
+		{
+			Item item = it->next();
+			cout << item.first << ":" << item.second << "; ";
+			if(!it->has_next())
+				cout << endl;
+		}
+		delete it;
+	}
 }
 #endif
