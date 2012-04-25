@@ -15,9 +15,9 @@ class List
 {
 	public:
 		List();
-		~List();
+		virtual ~List();
 		void append(T item);
-		void insert(int i, T item);
+		//void insert(int i, T item);
 		T pop();
 		T get(); //последний элемент
 		T get(int i);
@@ -28,10 +28,11 @@ class List
 		bool is_empty() { return length == 0; }
 	public:
 		friend class ListIterator<T>;
-	private:
-		void insert(T item, Node<T>* left, Node<T>* right);
+	protected:
+		void insert_after(T item, Node<T>* left);
+		void insert_before(T item, Node<T>* rigth);
 		void remove(Node<T>* node);
-	private:
+	protected:
 		Node<T>* first;
 		Node<T>* last;
 		int length;
@@ -76,14 +77,13 @@ List<T>::~List()
 template<typename T>
 void List<T>::append(T item)
 {
-	insert(item, last, 0);
-	++length;
+	insert_after(item, last);
 }
 
-template<typename T>
+/*template<typename T>
 void List<T>::insert(int i, T item)
 {
-	if(i >= length)
+	if(i > length)
 		throw out_of_range("List size is smaller than i!");
 	ListIterator<T>* it = iterator();
 	int ind = 0;
@@ -98,7 +98,8 @@ void List<T>::insert(int i, T item)
 		insert(item, left, right);
 	}
 	delete it;
-}
+	++length;
+}*/
 
 template<typename T>
 T List<T>::pop()
@@ -126,7 +127,7 @@ T List<T>::get(int i)
 	ListIterator<T>* it = iterator();
 	int ind = 0;
 	Node<T>* found = 0;
-	while(it->has_next() and ind++ < i)
+	while(it->has_next() and ind++ <= i)
 		found = it->next_node();
 	delete it;
 	if(found != 0)
@@ -151,20 +152,43 @@ void List<T>::print()
 
 //-----private
 template<typename T>
-void List<T>::insert(T item, Node<T>* left, Node<T>* right)
+void List<T>::insert_after(T item, Node<T>* left)
 {
 	Node<T>* node = new Node<T>();
 	node->item = item;
-	node->prev = left;
-	node->next = right;
 	if(left != 0)
+	{
 		left->next = node;
+		node->prev = left;
+		if(left == last)
+			last = node;
+	}
 	else
+	{
 		first = node;
-	if(right != 0)
-		left->prev = node;
-	else
 		last = node;
+	}
+	++length;
+}
+
+template<typename T>
+void List<T>::insert_before(T item, Node<T>* right)
+{
+	Node<T>* node = new Node<T>();
+	node->item = item;
+	if(right != 0)
+	{
+		right->prev = node;
+		node->next = right;
+		if(right == first)
+			first = node;
+	}
+	else
+	{
+		first = node;
+		last = node;
+	}
+	++length;
 }
 
 template<typename T>

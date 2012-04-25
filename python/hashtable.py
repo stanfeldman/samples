@@ -4,29 +4,21 @@ from hash_functions import *
 class HashTable(object):
 	def __init__(self):
 		self.size = 100
-		self.hashtable = [None]*self.size
+		self.hashtable = [[]]*self.size
 		
 	def add(self, key, value):
 		ind = self.hsh(key)
 		existed = self.hashtable[ind]
 		inserted = (key,value)
-		if existed:
-			if isinstance(existed, list):
-				existed.append(inserted)
-			else:
-				self.hashtable[ind] = [existed, inserted]
-		else:
-			self.hashtable[ind] = inserted
+		existed.append(inserted)
 		
 	def get(self, key):
 		ind = self.hsh(key)
 		found = self.hashtable[ind]
-		if not isinstance(found, list):
-			return found[1]
-		else:
-			for (k,v) in found:
-				if k == key:
-					return v
+		for (k,v) in found:
+			if k == key:
+				return v
+		return None
 		
 	def hsh(self, string):
 		res = 0
