@@ -26,25 +26,31 @@ class HashTable(object):
 			res = ord(ch) + (res << 5) + (res >> 2)
 		return res % self.size
 		
-ht = HashTable()
-ht.add("lala", 23)
-ht.add("zzz", 1234)
-ht.add("rrrrrr", 23455)
-print ht.get("lala")
-print ht.get("zzz")
-for i in xrange(1000):
-	ht.add(str(i), i)
-start_time = time()
-print ht.get("555")
-print "hashtable time: %s ms" % ((time()-start_time)*1000)
-#dct = {"lala": 555, "zzz": 1234, "rrrrrr": 23455}
-#start_time = time()
-#print dct["zzz"]
-#print "dict time: %s ms" % ((time()-start_time)*1000)
-#start_time = time()
-#print ht.hsh("helloworld"*100)
-#print "hash time: %s ms" % ((time()-start_time)*1000)
-#start_time = time()
-#print JSHash("helloworld"*100) % ht.size
-#print "hash time: %s ms" % ((time()-start_time)*1000)
+	def __iter__(self):
+		for hl in self.hashtable:
+			for (k,v) in hl:
+				yield (k,v)
+		
+if __name__ == "__main__":
+	ht = HashTable()
+	ht.add("lala", 23)
+	ht.add("zzz", 1234)
+	ht.add("rrrrrr", 23455)
+	print ht.get("lala")
+	print ht.get("zzz")
+	for i in xrange(1000):
+		ht.add(str(i), i)
+	start_time = time()
+	print ht.get("555")
+	print "hashtable time: %s ms" % ((time()-start_time)*1000)
+	#dct = {"lala": 555, "zzz": 1234, "rrrrrr": 23455}
+	#start_time = time()
+	#print dct["zzz"]
+	#print "dict time: %s ms" % ((time()-start_time)*1000)
+	#start_time = time()
+	#print ht.hsh("helloworld"*100)
+	#print "hash time: %s ms" % ((time()-start_time)*1000)
+	#start_time = time()
+	#print JSHash("helloworld"*100) % ht.size
+	#print "hash time: %s ms" % ((time()-start_time)*1000)
 
