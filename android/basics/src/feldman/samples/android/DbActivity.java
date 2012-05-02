@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 public class DbActivity extends Activity 
 {
-	@Override
+	
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
@@ -51,13 +51,13 @@ public class DbActivity extends Activity
 			super(context, name, null, 3);
 		}
 
-		@Override
+		
 		public void onCreate(SQLiteDatabase db) 
 		{
 			db.execSQL("create table t1(_id integer primary key, value text)");
 		}
 
-		@Override
+		
 		public void onUpgrade(SQLiteDatabase db, int arg1, int arg2) 
 		{
 			db.execSQL("drop table if exists t1");

@@ -11,14 +11,14 @@ import android.widget.ListView;
 
 public class MainActivity extends ListActivity 
 {
-    @Override
+    
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
         setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, this.samples));
     }
     
-    @Override
+    
 	protected void onListItemClick(ListView l, View v, int position, long id) 
     {
 		super.onListItemClick(l, v, position, id);

@@ -8,7 +8,7 @@ sock.connect(address)
 print "Sent '%s' to %s:%s" % (message, address[0], address[1])
 sock.send(message)
 while True:
-	data, address = sock.recvfrom(8192)
+	data, address = sock.recvfrom(1024*1024)
 	print "Received '%s' from %s:%s" % (data, address[0], address[1])
 	if data == "exit":
 		break

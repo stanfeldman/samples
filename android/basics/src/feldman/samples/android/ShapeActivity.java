@@ -23,7 +23,7 @@ public class ShapeActivity extends Activity
 			super(context);
 		}
 		
-		@Override
+		
 		protected void onDraw(Canvas canvas) 
 		{
 			Paint paint = new Paint();
@@ -36,7 +36,7 @@ public class ShapeActivity extends Activity
 		}
 	}
 	
-	@Override
+	
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);

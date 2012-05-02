@@ -88,7 +88,7 @@ public class SurfaceViewActivity extends Activity
 		private AssetManager asset_manager;
 	}
 	
-	@Override
+	
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -98,14 +98,14 @@ public class SurfaceViewActivity extends Activity
 		setContentView(this.view);
 	}
 	
-	@Override
+	
 	protected void onPause() 
 	{
 		super.onPause();
 		this.view.pause();
 	}
 
-	@Override
+	
 	protected void onResume() 
 	{
 		super.onResume();

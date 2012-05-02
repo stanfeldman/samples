@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 public class LifeCycleActivity extends Activity 
 {
-	@Override
+	
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
@@ -15,7 +15,7 @@ public class LifeCycleActivity extends Activity
 		log("created");
 	}
 
-	@Override
+	
 	protected void onPause() 
 	{
 		super.onPause();
@@ -24,7 +24,7 @@ public class LifeCycleActivity extends Activity
 			log("finished");
 	}
 
-	@Override
+	
 	protected void onResume() 
 	{
 		super.onResume();

@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 public class SingleTouchActivity extends Activity 
 {
-	@Override
+	
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -19,7 +19,7 @@ public class SingleTouchActivity extends Activity
 		setContentView(txt);
 	}
 
-	@Override
+	
 	public boolean onTouchEvent(MotionEvent event) 
 	{
 		String out = "";

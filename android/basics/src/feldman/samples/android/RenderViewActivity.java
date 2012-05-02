@@ -23,7 +23,7 @@ public class RenderViewActivity extends Activity
 			super(context);
 		}
 		
-		@Override
+		
 		protected void onDraw(Canvas canvas) 
 		{
 			//canvas.drawRGB(random.nextInt(256), random.nextInt(256), random.nextInt(256));
@@ -38,7 +38,7 @@ public class RenderViewActivity extends Activity
 		private Random random = new Random();
 	}
 	
-	@Override
+	
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);

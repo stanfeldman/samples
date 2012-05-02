@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 public class ExternalStorageActivity extends Activity 
 {
-	@Override
+	
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
@@ -27,7 +27,9 @@ public class ExternalStorageActivity extends Activity
 		{
 			File ext_dir = Environment.getExternalStorageDirectory();
 			File f = new File(ext_dir.getAbsolutePath() + File.separator + "basics" + File.separator + "basics_app_file.txt");
-			FileUtils.write(f, "from basics app");
+			if(f.exists())
+				f.delete();
+			FileUtils.write(f, "from basics app"); 
 			txt.setText("text was written");
 			String writtenText = FileUtils.readFileToString(f);
 			Log.i(getClass().getName(), writtenText);
