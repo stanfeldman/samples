@@ -3,7 +3,7 @@
     package="feldman.samples.android"
     android:versionCode="1"
     android:versionName="1.0" >
-    <uses-sdk android:minSdkVersion="7" />
+    <uses-sdk android:minSdkVersion="8"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
         android:icon="@drawable/ic_launcher"
@@ -22,8 +22,8 @@
             android:label="LifeCycle" >
         </activity>
         <activity 
-            android:name=".SingleTouchActivity"
-            android:label="SingleTouch" >
+            android:name=".TouchActivity"
+            android:label="Touch" >
         </activity>
         <activity 
             android:name=".AssetsActivity"
