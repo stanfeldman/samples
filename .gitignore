@@ -58,3 +58,4 @@ pip-log.txt
 *.lai
 *.la
 *.a
+/java/game_loop/nbproject/private/

@@ -40,7 +40,7 @@ public class MainActivity extends ListActivity
 	}
 
 	private String samples [] = {
-			"LifeCycle", "SingleTouch", "Assets", 
+			"LifeCycle", "Touch", "Assets", 
 			"ExternalStorage", "RenderView", "Shape", 
 			"Bitmap", "SurfaceView", "Prefs", "Db"
 	};
