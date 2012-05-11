@@ -6,7 +6,7 @@ class Lexer(object):
 		for (tag, regex) in tokens_spec:
 			self.tokens_spec.append((tag, re.compile(regex)))
 			
-	def tokens(self, string):
+	def tokens2(self, string):
 		result = []
 		stream = ""
 		found_token = None
@@ -54,5 +54,33 @@ class Lexer(object):
 					#print matches
 			i += 1
 		return result
+		
+	def tokens(self, string):
+		results = []
+		inp = string
+		def match_compare(x,y):
+			if x[0] < y[0]:
+				return -1
+			elif x[0] > y[0]:
+				return 1
+			else:
+				if x[1] < y[1]:
+					return 1
+				else:
+					return -1
+		while(inp):
+			#print inp
+			founded = []
+			for (tag, regex) in self.tokens_spec:
+				m = regex.search(inp)
+				if m:
+					founded.append((m.start(), m.end(), tag))
+			if founded:
+				f = sorted(founded, cmp = match_compare)[0]
+				results.append((f[2], inp[f[0]:f[1]]))
+				inp = inp[f[1]:]
+			else:
+				break
+		return results
 
 			
