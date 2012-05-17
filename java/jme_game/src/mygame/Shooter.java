@@ -10,6 +10,8 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.Material;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -74,8 +76,11 @@ public class Shooter extends SimpleApplication
     
     private void initCamera()
     {
-        cam.setLocation(new Vector3f(0, 4f, 6f));
-        cam.lookAt(new Vector3f(2,2,0), Vector3f.UNIT_Y);
+        cam.setLocation(new Vector3f(0, 1f, 6f));
+        //cam.lookAt(new Vector3f(0,0,0), new Vector3f(0,0,0));
+        Quaternion rotator = new Quaternion();
+        rotator.fromAngleAxis(FastMath.QUARTER_PI, Vector3f.UNIT_Y);
+        //cam.setRotation(rotator);
     }
 
     private void initCrossHairs() 
@@ -111,11 +116,24 @@ public class Shooter extends SimpleApplication
             for(int j = 0; j < 5; ++j)
             {
                 Vector3f loc = new Vector3f(j, i*2*brickHeight, 0);
-                createBrick(loc, brickLength, brickWidth, brickHeight);
+                createBrick(loc, brickLength, brickWidth, brickHeight, 2);
             }
+        
+        Vector3f loc2 = new Vector3f(0, 1, 2);
+        Box brickBox = new Box(Vector3f.ZERO, brickLength, brickWidth, brickHeight);
+        brickBox.scaleTextureCoordinates(new Vector2f(1f, .5f));
+        Geometry brickGeo = new Geometry("brick", brickBox);
+        brickGeo.setMaterial((Material)resources.get("materials.brick"));
+        brickGeo.setLocalTranslation(loc2);
+        rootNode.attachChild(brickGeo);
+        Quaternion quat1 = new Quaternion();
+        quat1.fromAngleAxis(-FastMath.QUARTER_PI, Vector3f.UNIT_Z);
+        Quaternion quat2 = new Quaternion();
+        quat2.fromAngleAxis(FastMath.QUARTER_PI, Vector3f.UNIT_Y);
+        brickGeo.rotate(quat1.mult(quat2));
     }
     
-    private void createBrick(Vector3f loc, float length, float width, float height)
+    private Geometry createBrick(Vector3f loc, float length, float width, float height, float mass)
     {
         Box brickBox = new Box(Vector3f.ZERO, length, height, width);
         brickBox.scaleTextureCoordinates(new Vector2f(1f, .5f));
@@ -123,9 +141,10 @@ public class Shooter extends SimpleApplication
         brickGeo.setMaterial((Material)resources.get("materials.brick"));
         brickGeo.setLocalTranslation(loc);
         rootNode.attachChild(brickGeo);
-        RigidBodyControl brickPhysics = new RigidBodyControl(2f);
+        RigidBodyControl brickPhysics = new RigidBodyControl(mass);
         brickGeo.addControl(brickPhysics);
         bulletAppState.getPhysicsSpace().add(brickPhysics);
+        return brickGeo;
     }
     
     private void initKeys()
