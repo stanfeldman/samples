@@ -14,4 +14,4 @@ def application(env, start_response):
 		return ['<h1>Not Found</h1>']
 
 if __name__ == '__main__':
-	WSGIServer(('', 8080), application, log=None).serve_forever()
+	WSGIServer(('', 8080), application, keyfile='server.key', certfile='server.crt').serve_forever()
