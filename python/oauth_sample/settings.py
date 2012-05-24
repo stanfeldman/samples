@@ -1,4 +1,8 @@
-from controllers.auth import PageController, StartAuthController, EndAuthController, ResultController
+from controllers.oauth import PageController, StartAuthController, EndAuthController, ResultController
+from controllers.api import PublicApiController, PrivateApiController
+from controllers.db import DbHelper
+from kiss.core.application import Event
+from kiss.models import SqliteDatabase
 
 
 options = {
@@ -12,7 +16,11 @@ options = {
 			"start": StartAuthController,
 			"end": EndAuthController
 		},
-		"result": ResultController
+		"result": ResultController,
+		"api": {
+			"public": PublicApiController,
+			"private": PrivateApiController
+		}
 	},
 	"views": {
 		"templates_path": "views.templates"
@@ -25,6 +33,16 @@ options = {
 		"client_id": "691519038986.apps.googleusercontent.com",
 		"client_secret": "UsLDDLu-1ry8IgY88zy6qNiU",
 		"target_uri": "https://www.googleapis.com/tasks/v1/lists/@default/tasks"
+	},
+	"events": {
+		Event.ApplicationAfterLoad: DbHelper.application_after_load
+	},
+	"models": {
+		"engine": SqliteDatabase,
+		#"host": "localhost",
+		"database": 'oauth_sample.sqldb'#,
+		#"user": 'postgres',
+		#"password": "postgres"
 	}
 }
 

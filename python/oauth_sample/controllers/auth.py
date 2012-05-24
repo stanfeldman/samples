@@ -1,50 +1,50 @@
-from kiss.views.templates import TemplateResponse
-from kiss.views.base import RedirectResponse
-from kiss.controllers.core import Controller
-from kiss.core.application import Application
-from urllib import urlencode
-import requests
-import json
+from putils.aop import Aspect
+from kiss.core.exceptions import Forbidden
+from models.auth import Consumer, User, ConsumerUser
+from peewee import DoesNotExist
 
 
-class PageController(Controller):
-	def get(self, request):
-		return TemplateResponse("page.html")
-	
-class StartAuthController(Controller):
-	def get(self, request):
-		options = Application().options["auth"]
-		params = {
-			"client_id": options["client_id"],
-			"redirect_uri": options["redirect_uri"],
-			"scope": options["scope"],
-			"response_type": "code",
-			"approval_prompt": "force",
-			"access_type": "offline"
-		}
-		return RedirectResponse("%s?%s" % (options["authorization_uri"], urlencode(params)))
+class ApiSecureAspect(Aspect):
+	def __init__(self, token_name):
+		Aspect.__init__(self)
+		self.token_name = token_name
 		
-
-class EndAuthController(Controller):
-	def get(self, request):
-		options = Application().options["auth"]
-		params = {
-			"client_id": options["client_id"],
-			"client_secret": options["client_secret"],
-			"grant_type": "authorization_code",
-			"code": request.args["code"],
-			"redirect_uri": options["redirect_uri"]
-		}
-		res = json.loads(requests.post(options["get_token_uri"], params).text)
-		request.session["access_token"] = res["access_token"]
-		print request.session["access_token"]
-		return RedirectResponse("/result")
+	def on_enter(self, call):
+		request = call.args[1]
+		res = self.check_consumer(request, self.token_name)
+		if not isinstance(res, Consumer):
+			return res
+			
+	def check_consumer(self, request, token_name):
+		if not self.token_name in request.args:
+			return Forbidden("You should pass %s in request args" % self.token_name)
+		token = request.args[self.token_name]
+		kwargs = {self.token_name: token}
+		try:
+			return Consumer.get(**kwargs)
+		except DoesNotExist:
+			return Forbidden("Wrong client_id")
+			
+			
+class PublicApiSecureAspect(ApiSecureAspect):
+	def __init__(self):
+		ApiSecureAspect.__init__(self, "client_id")
+			
+			
+class PrivateApiSecureAspect(ApiSecureAspect):
+	def __init__(self):
+		ApiSecureAspect.__init__(self, "access_token")
 		
-
-class ResultController(Controller):
-	def get(self, request):
-		options = Application().options["auth"]
-		params = {"access_token": request.session["access_token"]}
-		result = json.loads(requests.get("%s?%s" % (options["target_uri"], urlencode(params))).text)
-		return TemplateResponse("result.html", {"result": result})
-
+	def on_enter(self, call):
+		request = call.args[1]
+		consumer = self.check_consumer(request, self.token_name)
+		if not isinstance(consumer, Consumer):
+			return consumer
+		if not "username" in request.args:
+			return Forbidden("You should pass %s in request args" % "username")
+		username = request.args["username"]
+		try:
+			user = User.get(username=username)
+			ConsumerUser.get(consumer=consumer, user=user)
+		except DoesNotExist:
+			return Forbidden("Wrong %s and %s" %(self.token_name, "username"))
