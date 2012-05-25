@@ -1,7 +1,7 @@
 from kiss.controllers.core import Controller
 from kiss.views.core import JsonResponse
 import json
-from auth import PublicApiSecureAspect, PrivateApiSecureAspect
+from auth import PublicApiSecureAspect, ProtectedApiSecureAspect
 
 
 class PublicApiController(Controller):
@@ -11,8 +11,8 @@ class PublicApiController(Controller):
 		return JsonResponse(public_data)
 		
 		
-class PrivateApiController(Controller):
-	@PrivateApiSecureAspect()
+class ProtectedApiController(Controller):
+	@ProtectedApiSecureAspect()
 	def get(self, request):
 		data = {"item4": 88, "item5": 7777}
 		return JsonResponse(data)

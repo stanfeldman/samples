@@ -31,7 +31,7 @@ class PublicApiSecureAspect(ApiSecureAspect):
 		ApiSecureAspect.__init__(self, "client_id")
 			
 			
-class PrivateApiSecureAspect(ApiSecureAspect):
+class ProtectedApiSecureAspect(ApiSecureAspect):
 	def __init__(self):
 		ApiSecureAspect.__init__(self, "access_token")
 		

@@ -1,5 +1,5 @@
 from controllers.oauth import PageController, StartAuthController, EndAuthController, ResultController
-from controllers.api import PublicApiController, PrivateApiController
+from controllers.api import PublicApiController, ProtectedApiController
 from controllers.db import DbHelper
 from kiss.core.application import Event
 from kiss.models import SqliteDatabase
@@ -19,7 +19,7 @@ options = {
 		"result": ResultController,
 		"api": {
 			"public": PublicApiController,
-			"private": PrivateApiController
+			"protected": ProtectedApiController
 		}
 	},
 	"views": {
