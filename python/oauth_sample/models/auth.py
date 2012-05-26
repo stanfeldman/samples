@@ -6,6 +6,7 @@ class Consumer(Model):
 	name = CharField()
 	client_id = CharField(unique=True)
 	client_secret = CharField()
+	code = CharField() #grant code
 	access_token = CharField()
 	redirect_uri = CharField()
 	

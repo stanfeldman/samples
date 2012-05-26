@@ -1,0 +1,14 @@
+<html>
+	<head>
+		<title>auth request</title>
+	</head>
+	<body>
+		<h1>auth request</h1>
+		<h2>{{consumer.name}}&nbsp;requests access</h2>
+		<form action="/auth/auth" method="post">
+			<input type="hidden" name="client_id" value="{{consumer.client_id}}"/>
+			<input type="hidden" name="temp_token" value="{{temp_token}}"/>
+			<input type="submit" value="Give access!"/>
+		</form>
+	</body>
+</html>
