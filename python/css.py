@@ -1,7 +1,12 @@
-from scss.parser import Stylesheet
+import scss
+from scss import Scss
 from time import time
 
 code = r"""
+@option compress: no;
+$grid-columns-count: 16;
+@import 'styles/reset.css';
+@import 'styles/grid.css';
 .selector {
     a {
         display: block;
@@ -19,10 +24,16 @@ $side: bottom;
     style: $style;
     }
 }
+.grid2
+{
+	@include grid;
+}
 """
+scss.LOAD_PATHS = "/home/stanislavfeldman/projects/samples/html/grid/views/static"
+print scss.LOAD_PATHS
 time1 = time()
-css_parser = Stylesheet(options={"compress": True})
-result = css_parser.loads(code)
+css_parser = Scss()
+result = css_parser.compile(code)
 time2 = time()
 print result
 print "time: " + str(time2-time1)

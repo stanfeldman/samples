@@ -1,10 +1,10 @@
-$grid-columns-count: 12;
-$grid-column-gap: 2%;
-$grid-column-width: (100% - $grid-column-gap * $grid-columns-count) / $grid-columns-count;
-$grid-max-width: 1140px;
-$grid-min-width: 755px;
-$grid-margin: 1%;
-$grid-column-margin: 1%;
+$grid-columns-count: 12 !default;
+$grid-column-gap: 2% !default;
+$grid-column-width: (100% - $grid-column-gap * $grid-columns-count) / $grid-columns-count !default;
+$grid-max-width: 1140px !default;
+$grid-min-width: 800px !default;
+$grid-margin: 1% !default;
+$grid-column-margin: 1% !default;
 
 @mixin grid-column($i)
 {
@@ -20,13 +20,18 @@ $grid-column-margin: 1%;
 	.grid-column-#{$i} { @include grid-column($i); }
 }
 
-.grid
+@mixin grid
 {
 	margin-left: $grid-margin;
 	margin-right: $grid-margin;
 }
 
-.grid-row 
+.grid
+{
+	@include grid;
+}
+
+@mixin grid-row 
 {
     max-width: $grid-max-width;
 	min-width: $grid-min-width;
@@ -35,9 +40,19 @@ $grid-column-margin: 1%;
     overflow: hidden;
 }
 
-.grid-row .grid-row 
+.grid-row 
 {
-	margin: 0 -$grid-column-margin;
+    @include grid-row;
+}
+
+@mixin grid-nested-row 
+{
+    margin: 0 -$grid-column-margin;
 	width: auto;
 	min-width: 0px;
+}
+
+.grid-row .grid-row 
+{
+	@include grid-nested-row;
 }
