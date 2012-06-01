@@ -1,4 +1,4 @@
-from controllers.auth_usage import PageController, StartAuthController, EndAuthController, ResultController
+from controllers.auth_usage import PageController, StartAuthController, StartPasswordAuthController, EndAuthController, ResultController, LogoutController
 from controllers.api import PublicApiController, ProtectedApiController
 from controllers.db import DbHelper
 from kiss.core.application import Event
@@ -23,7 +23,9 @@ options = {
 		"page": PageController,
 		"auth_usage": {
 			"start": StartAuthController,
-			"end": EndAuthController
+			"start_password": StartPasswordAuthController,
+			"end": EndAuthController,
+			"logout": LogoutController
 		},
 		"result": ResultController
 	},
@@ -31,7 +33,7 @@ options = {
 		"templates_path": "views.templates"
 	},
 	"events": {
-		Event.ApplicationAfterLoad: DbHelper.application_after_load
+		Event.ApplicationStarted: DbHelper.application_after_load
 	},
 	"models": {
 		"engine": SqliteDatabase,

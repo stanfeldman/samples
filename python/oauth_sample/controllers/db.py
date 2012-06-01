@@ -15,6 +15,7 @@ class DbHelper(object):
 		user2 = User.create(username="boris", password=self.hash_password("b"))
 		consumer1 = Consumer.create(name="app1", client_id="1", client_secret=str(uuid4()), access_token="a1")
 		consumer2 = Consumer.create(name="app2", client_id="2", client_secret="secret2", redirect_uri="http://localhost:8080/auth_usage/end")
+		consumer3 = Consumer.create(name="app3", client_id="3", client_secret="secret3")
 		ConsumerUser.create(consumer=consumer1, user=user1)
 		print "app loaded"
 		

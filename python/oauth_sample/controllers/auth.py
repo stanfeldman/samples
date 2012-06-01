@@ -62,7 +62,31 @@ class TokenController(Controller):
 	def post(self, request):
 		client_id = request.form["client_id"]
 		client_secret = request.form["client_secret"]
-		code = request.form["code"]
+		grant_type = request.form["grant_type"]
+		if grant_type == "password":
+			username = request.form["username"]
+			password = request.form["password"]
+			return self.by_password(client_id, client_secret, username, password)
+		elif grant_type == "authorization_code":
+			code = request.form["code"]
+			return self.by_code(client_id, client_secret, code)
+			
+	def by_password(self, client_id, client_secret, username, password):
+		try:
+			user = User.get(username=username, password=password)
+			print client_id, client_secret
+			consumer = Consumer.get(client_id=client_id, client_secret=client_secret)
+			ConsumerUser.get_or_create(consumer=consumer, user=user)
+			consumer.access_token = str(uuid4())
+			print consumer.access_token
+			consumer.save()
+			params = {"access_token": consumer.access_token}
+			return JsonResponse(params)
+		except DoesNotExist:
+			params = {"error": "Wrong parameters"}
+			return JsonResponse(params)
+		
+	def by_code(self, client_id, client_secret, code):
 		try:
 			consumer = Consumer.get(client_id=client_id, client_secret=client_secret, code=code)
 			consumer.access_token = str(uuid4())
@@ -70,4 +94,5 @@ class TokenController(Controller):
 			params = {"access_token": consumer.access_token}
 			return JsonResponse(params)
 		except DoesNotExist:
-			return Forbidden("Wrong parameters")
+			params = {"error": "Wrong parameters"}
+			return JsonResponse(params)

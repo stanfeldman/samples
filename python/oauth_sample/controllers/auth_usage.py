@@ -5,6 +5,7 @@ from kiss.core.application import Application
 from urllib import urlencode
 import requests
 import json
+from db import DbHelper
 
 google_options = {
 	"authorization_uri": "https://accounts.google.com/o/oauth2/auth",
@@ -58,10 +59,40 @@ class EndAuthController(Controller):
 		print "access_token", request.session["access_token"]
 		return RedirectResponse("/result")
 		
+		
+class StartPasswordAuthController(Controller):
+	def get(self, request):
+		return TemplateResponse("user_password_auth.html")
+		
+	def post(self, request):
+		params = {
+			"client_id": "3",
+			"client_secret": "secret3",
+			"grant_type": "password",
+			"username": request.form["username"],
+			"password": DbHelper().hash_password(request.form["password"])
+		}
+		resp = requests.post(options["get_token_uri"], params).text
+		res = json.loads(resp)
+		if "access_token" in res:
+			request.session["access_token"] = res["access_token"]
+			print "access_token", request.session["access_token"]
+		else:
+			request.session["error"] = res
+		return RedirectResponse("/result")
 
 class ResultController(Controller):
 	def get(self, request):
-		params = {"access_token": request.session["access_token"]}
-		result = json.loads(requests.get("%s?%s" % (options["target_uri"], urlencode(params))).text)
+		if "access_token" in request.session and request.session["access_token"]:
+			params = {"access_token": request.session["access_token"]}
+			result = json.loads(requests.get("%s?%s" % (options["target_uri"], urlencode(params))).text)
+		else:
+			result = request.session["error"]
 		return TemplateResponse("result.html", {"result": result})
+		
+		
+class LogoutController(Controller):
+	def get(self, request):
+		request.session.delete()
+		return RedirectResponse("/page")
 
