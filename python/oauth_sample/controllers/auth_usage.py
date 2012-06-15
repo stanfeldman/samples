@@ -7,24 +7,35 @@ import requests
 import json
 from db import DbHelper
 
-google_options = {
-	"authorization_uri": "https://accounts.google.com/o/oauth2/auth",
-	"scope": "https://www.googleapis.com/auth/tasks",
-	"get_token_uri": "https://accounts.google.com/o/oauth2/token",
-	"redirect_uri": "http://localhost:8080/auth_usage/end",
-	"client_id": "691519038986.apps.googleusercontent.com",
-	"client_secret": "UsLDDLu-1ry8IgY88zy6qNiU",
-	"target_uri": "https://www.googleapis.com/tasks/v1/lists/@default/tasks"
-}
 
 options = {
-	"authorization_uri": "http://localhost:8080/auth/auth",
-	"scope": "protected_api",
-	"get_token_uri": "http://localhost:8080/auth/token",
-	"redirect_uri": "http://localhost:8080/auth_usage/end",
-	"client_id": "2",
-	"client_secret": "secret2",
-	"target_uri": "http://localhost:8080/api/protected"
+	"feldman": {
+		"authorization_uri": "http://localhost:8080/auth/auth",
+		"scope": "protected_api",
+		"get_token_uri": "http://localhost:8080/auth/token",
+		"redirect_uri": "http://localhost:8080/auth_usage/feldman/end",
+		"client_id": "2",
+		"client_secret": "secret2",
+		"target_uri": "http://localhost:8080/api/protected"
+	},
+	"google": {
+		"authorization_uri": "https://accounts.google.com/o/oauth2/auth",
+		"scope": "https://www.googleapis.com/auth/tasks",
+		"get_token_uri": "https://accounts.google.com/o/oauth2/token",
+		"redirect_uri": "http://localhost:8080/auth_usage/google/end",
+		"client_id": "691519038986.apps.googleusercontent.com",
+		"client_secret": "UsLDDLu-1ry8IgY88zy6qNiU",
+		"target_uri": "https://www.googleapis.com/tasks/v1/lists/@default/tasks"
+	},
+	"vk": {
+		"authorization_uri": "https://api.vk.com/oauth/authorize",
+		"scope": "wall",
+		"get_token_uri": "https://api.vk.com/oauth/token",
+		"redirect_uri": "http://test.com:8080/auth_usage/vk/end",
+		"client_id": "2378631",
+		"client_secret": "oX5geATcgJgWbkfImli9",
+		"target_uri": "https://api.vk.com/method/wall.get"
+	}
 }
 
 
@@ -34,30 +45,33 @@ class PageController(Controller):
 	
 class StartAuthController(Controller):
 	def get(self, request):
+		current_options = options[request.params["backend"]]
 		params = {
-			"client_id": options["client_id"],
-			"redirect_uri": options["redirect_uri"],
-			"scope": options["scope"],
+			"client_id": current_options["client_id"],
+			"redirect_uri": current_options["redirect_uri"],
+			"scope": current_options["scope"],
 			"response_type": "code",
 			"approval_prompt": "force",
 			"access_type": "offline"
 		}
-		return RedirectResponse("%s?%s" % (options["authorization_uri"], urlencode(params)))
+		print params
+		return RedirectResponse("%s?%s" % (current_options["authorization_uri"], urlencode(params)))
 		
 
 class EndAuthController(Controller):
 	def get(self, request):
+		current_options = options[request.params["backend"]]
 		params = {
-			"client_id": options["client_id"],
-			"client_secret": options["client_secret"],
+			"client_id": current_options["client_id"],
+			"client_secret": current_options["client_secret"],
 			"grant_type": "authorization_code",
 			"code": request.args["code"],
-			"redirect_uri": options["redirect_uri"]
+			"redirect_uri": current_options["redirect_uri"]
 		}
-		res = json.loads(requests.post(options["get_token_uri"], params).text)
+		res = json.loads(requests.post(current_options["get_token_uri"], params).text)
 		request.session["access_token"] = res["access_token"]
 		print "access_token", request.session["access_token"]
-		return RedirectResponse("/result")
+		return RedirectResponse(request.params["backend"] + "/result")
 		
 		
 class StartPasswordAuthController(Controller):
@@ -83,12 +97,18 @@ class StartPasswordAuthController(Controller):
 
 class ResultController(Controller):
 	def get(self, request):
+		current_options = options[request.params["backend"]]
 		if "access_token" in request.session and request.session["access_token"]:
+			self.access_token = request.session["access_token"]
 			params = {"access_token": request.session["access_token"]}
-			result = json.loads(requests.get("%s?%s" % (options["target_uri"], urlencode(params))).text)
+			result = json.loads(requests.get("%s?%s" % (current_options["target_uri"], urlencode(params)), auth=self.auth).text)
 		else:
 			result = request.session["error"]
 		return TemplateResponse("result.html", {"result": result})
+		
+	def auth(self, request):
+		request.headers["Authorization"] = "Bearer %s" % self.access_token
+		return request
 		
 		
 class LogoutController(Controller):

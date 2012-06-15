@@ -1,10 +1,12 @@
 from controllers.auth_usage import PageController, StartAuthController, StartPasswordAuthController, EndAuthController, ResultController, LogoutController
 from controllers.api import PublicApiController, ProtectedApiController
 from controllers.db import DbHelper
-from kiss.core.application import Event
+from kiss.core.events import ApplicationStarted
 from kiss.models import SqliteDatabase
 from controllers.auth import AuthController, TokenController
 
+def str_url_regex(str_name):
+	return r"""(?P<%s>[^ \,\:\;\"\\/']+)""" % str_name
 
 options = {
 	"application": {
@@ -22,18 +24,20 @@ options = {
 		},
 		"page": PageController,
 		"auth_usage": {
-			"start": StartAuthController,
+			str_url_regex("backend"): {
+				"start": StartAuthController,
+				"end": EndAuthController,
+			},
 			"start_password": StartPasswordAuthController,
-			"end": EndAuthController,
 			"logout": LogoutController
 		},
-		"result": ResultController
+		str_url_regex("backend") + "/result": ResultController
 	},
 	"views": {
 		"templates_path": "views.templates"
 	},
 	"events": {
-		Event.ApplicationStarted: DbHelper.application_after_load
+		ApplicationStarted: DbHelper.application_after_load
 	},
 	"models": {
 		"engine": SqliteDatabase,
