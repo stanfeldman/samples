@@ -22,7 +22,7 @@ options = {
 			"auth": AuthController,
 			"token": TokenController
 		},
-		"page": PageController,
+		"": PageController,
 		"auth_usage": {
 			str_url_regex("backend"): {
 				"start": StartAuthController,

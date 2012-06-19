@@ -6,6 +6,7 @@ from urllib import urlencode
 import requests
 import json
 from db import DbHelper
+from werkzeug.urls import url_decode
 
 
 options = {
@@ -20,21 +21,30 @@ options = {
 	},
 	"google": {
 		"authorization_uri": "https://accounts.google.com/o/oauth2/auth",
-		"scope": "https://www.googleapis.com/auth/tasks",
+		"scope": "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
 		"get_token_uri": "https://accounts.google.com/o/oauth2/token",
 		"redirect_uri": "http://localhost:8080/auth_usage/google/end",
 		"client_id": "691519038986.apps.googleusercontent.com",
 		"client_secret": "UsLDDLu-1ry8IgY88zy6qNiU",
-		"target_uri": "https://www.googleapis.com/tasks/v1/lists/@default/tasks"
+		"target_uri": "https://www.googleapis.com/oauth2/v1/userinfo"
 	},
 	"vk": {
-		"authorization_uri": "https://api.vk.com/oauth/authorize",
-		"scope": "wall",
+		"authorization_uri": "http://api.vk.com/oauth/authorize",
+		"scope": "",
 		"get_token_uri": "https://api.vk.com/oauth/token",
 		"redirect_uri": "http://test.com:8080/auth_usage/vk/end",
 		"client_id": "2378631",
 		"client_secret": "oX5geATcgJgWbkfImli9",
-		"target_uri": "https://api.vk.com/method/wall.get"
+		"target_uri": "https://api.vk.com/method/users.get"
+	},
+	"facebook": {
+		"authorization_uri": "https://www.facebook.com/dialog/oauth",
+		"scope": "email",
+		"get_token_uri": "https://graph.facebook.com/oauth/access_token",
+		"redirect_uri": "http://test.com:8080/auth_usage/facebook/end",
+		"client_id": "485249151491568",
+		"client_secret": "66f2503d9806104dd47fca55a6fbbac3",
+		"target_uri": "https://graph.facebook.com/me"
 	}
 }
 
@@ -54,7 +64,6 @@ class StartAuthController(Controller):
 			"approval_prompt": "force",
 			"access_type": "offline"
 		}
-		print params
 		return RedirectResponse("%s?%s" % (current_options["authorization_uri"], urlencode(params)))
 		
 
@@ -68,9 +77,11 @@ class EndAuthController(Controller):
 			"code": request.args["code"],
 			"redirect_uri": current_options["redirect_uri"]
 		}
-		res = json.loads(requests.post(current_options["get_token_uri"], params).text)
+		response = requests.post(current_options["get_token_uri"], params).text
+		#res = url_decode(response) # facebook
+		res = json.loads(response) # standart oauth 2.0
+		#request.session["user_id"] = res["user_id"] # vkontakte
 		request.session["access_token"] = res["access_token"]
-		print "access_token", request.session["access_token"]
 		return RedirectResponse(request.params["backend"] + "/result")
 		
 		
@@ -100,6 +111,7 @@ class ResultController(Controller):
 		current_options = options[request.params["backend"]]
 		if "access_token" in request.session and request.session["access_token"]:
 			self.access_token = request.session["access_token"]
+			#params = {"access_token": request.session["access_token"], "uids": request.session["user_id"], "fields": "uid, first_name, last_name, nickname, screen_name, sex, bdate, city, country, photo, photo_medium, photo_big"} # vkontakte
 			params = {"access_token": request.session["access_token"]}
 			result = json.loads(requests.get("%s?%s" % (current_options["target_uri"], urlencode(params)), auth=self.auth).text)
 		else:
