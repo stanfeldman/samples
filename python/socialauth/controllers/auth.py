@@ -2,13 +2,13 @@ from kiss.views.templates import TemplateResponse
 from kiss.views.core import RedirectResponse
 from kiss.controllers.core import Controller
 from kiss.core.application import Application
-from urllib import urlencode
 import requests
 import json
 from db import DbHelper
 from werkzeug.urls import url_decode
 from putils.types import Dict
 from urlparse import urljoin
+from werkzeug.urls import url_encode
 
 
 def str_url_regex(str_name):
@@ -25,7 +25,7 @@ class AuthBackend(object):
 			"approval_prompt": "force",
 			"access_type": "offline"
 		}
-		return RedirectResponse("%s?%s" % (options["authorization_uri"], urlencode(params)))
+		return RedirectResponse("%s?%s" % (options["authorization_uri"], url_encode(params)))
 		
 	def get_access_token(self, request, options):
 		params = {
@@ -39,18 +39,23 @@ class AuthBackend(object):
 		return self.prepare_access_token_response(response)
 		
 	def prepare_access_token_response(self, response):
-		return json.loads(response) # standart oauth 2.0
+		return json.loads(response)
 		
 	def get_user_info(self, request, options, access_token_result):
 		if "access_token" not in access_token_result or not access_token_result["access_token"]:
 			return RedirectResponse(AuthController.options["common"]["error_uri"])
 		self.access_token = access_token_result["access_token"]
 		params = self.prepare_user_info_request_params(access_token_result)
-		request.session["user"] = json.loads(requests.get("%s?%s" % (options["target_uri"], urlencode(params)), auth=self.auth).text)
-		return RedirectResponse(AuthController.options["common"]["success_uri"])
-		
+		user_info_response = json.loads(requests.get("%s?%s" % (options["target_uri"], url_encode(params)), auth=self.auth).text)
+		self.process_user_info_response(request, user_info_response)
+		return RedirectResponse("%s?%s" % (AuthController.options["common"]["success_uri"], url_encode(user_info_response)))
+				
 	def prepare_user_info_request_params(self, access_token_result):
 		return {"access_token": access_token_result["access_token"]}
+		
+	def process_user_info_response(self, request, user_info_response):
+		#request.session["user"] = user_info_response
+		pass
 		
 	def auth(self, request):
 		request.headers["Authorization"] = "Bearer %s" % self.access_token
@@ -59,10 +64,12 @@ class AuthBackend(object):
 		
 class GoogleAuthBackend(AuthBackend):
 	pass
+
 	
 class VkAuthBackend(AuthBackend):
 	def prepare_user_info_request_params(self, access_token_result):
 		return {"access_token": access_token_result["access_token"], "uids": access_token_result["user_id"], "fields": "uid, first_name, last_name, nickname, screen_name, sex, bdate, city, country, photo, photo_medium, photo_big"}
+
 	
 class FacebookAuthBackend(AuthBackend):
 	def prepare_access_token_response(self, response):
@@ -73,8 +80,8 @@ class AuthController(object):
 	options = {
 		"common": {
 			"base_uri": "http://localhost:8080/auth/",
-			"success_uri": "success",
-			"error_uri": "error"
+			"success_uri": "success/",
+			"error_uri": "error/"
 		},
 		"google": {
 			"authorization_uri": "https://accounts.google.com/o/oauth2/auth",

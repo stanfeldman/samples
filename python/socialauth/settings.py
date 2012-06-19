@@ -15,7 +15,7 @@ options = {
 		"auth": AuthController({
 			"common": {
 				"base_uri": "http://test.com:8080/auth/",
-				"success_uri": "/success"
+				"success_uri": "/success/"
 			},
 			"google": {
 				"client_id": "691519038986.apps.googleusercontent.com",
