@@ -1,5 +1,5 @@
 from time import time
-from elixir import metadata, Entity, Field, Unicode, Integer, UnicodeText, setup_all, drop_all, create_all, session
+from elixir import metadata, Entity, Field, Unicode, Integer, UnicodeText, setup_all, drop_all, create_all, session, using_options
 
 # Elixir/SqlAlchemy
 metadata.bind = "sqlite:///elixir.sqldb"
@@ -11,6 +11,20 @@ class Movie(Entity):
 	description = Field(UnicodeText)
 	def __repr__(self):
 		return '<Movie "%s" (%d)>' % (self.title, self.year)
+		
+class Person(Entity):
+	using_options(inheritance="multi")
+	name = Field(Unicode)
+	def __repr__(self):
+		return '<Person(%s) "%s">' % (self.__class__.__name__, self.name)
+	
+class Actor(Person):
+	using_options(inheritance="multi")
+	a = Field(Unicode)
+	
+class Director(Person):
+	using_options(inheritance="multi")
+	d = Field(Unicode)
 
 setup_all()
 drop_all()
@@ -33,6 +47,11 @@ movie.delete()
 session.commit()
 elixir_delete_time = (time()-start_time)*1000
 print Movie.query.all()
+#inheritance
+Actor(name="boris", a="foo a")
+Director(name="dir", d="dddd")
+session.commit()
+print Person.query.all()
 
 # Peewee
 from peewee import SqliteDatabase, Model, CharField, IntegerField, TextField

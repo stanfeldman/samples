@@ -8,10 +8,5 @@ class PageController(Controller):
 
 class ResultController(Controller):
 	def get(self, request):
-		print request.args
-		if "error" in request.args:
-			result = request.args["error"]
-		#else:
-		#	result = request.args["id"]
 		return TemplateResponse("result.html", {"result": request.args})
 

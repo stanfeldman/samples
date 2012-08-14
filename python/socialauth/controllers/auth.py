@@ -1,18 +1,12 @@
 from kiss.views.templates import TemplateResponse
 from kiss.views.core import RedirectResponse
 from kiss.controllers.core import Controller
-from kiss.core.application import Application
 import requests
 import json
-from db import DbHelper
 from werkzeug.urls import url_decode
-from putils.types import Dict
+from putils.types import Dict, Regex
 from urlparse import urljoin
 from werkzeug.urls import url_encode
-
-
-def str_url_regex(str_name):
-	return r"""(?P<%s>[^ \,\:\;\"\\/']+)""" % str_name
 	
 	
 class AuthBackend(object):
@@ -47,15 +41,17 @@ class AuthBackend(object):
 		self.access_token = access_token_result["access_token"]
 		params = self.prepare_user_info_request_params(access_token_result)
 		user_info_response = json.loads(requests.get("%s?%s" % (options["target_uri"], url_encode(params)), auth=self.auth).text)
-		self.process_user_info_response(request, user_info_response)
+		user_info_response = self.process_user_info_response(request, user_info_response)
 		return RedirectResponse("%s?%s" % (AuthController.options["common"]["success_uri"], url_encode(user_info_response)))
 				
 	def prepare_user_info_request_params(self, access_token_result):
 		return {"access_token": access_token_result["access_token"]}
 		
 	def process_user_info_response(self, request, user_info_response):
-		#request.session["user"] = user_info_response
-		pass
+		result = {}
+		print user_info_response
+		result["id"] = user_info_response["id"]
+		return result
 		
 	def auth(self, request):
 		request.headers["Authorization"] = "Bearer %s" % self.access_token
@@ -63,17 +59,42 @@ class AuthBackend(object):
 
 		
 class GoogleAuthBackend(AuthBackend):
-	pass
+	def process_user_info_response(self, request, user_info_response):
+		result = {}
+		print user_info_response
+		result["id"] = user_info_response["id"]
+		result["email"] = user_info_response["email"]
+		result["firstname"] = user_info_response["name"]
+		result["lastname"] = user_info_response["family_name"]
+		return result
 
 	
 class VkAuthBackend(AuthBackend):
 	def prepare_user_info_request_params(self, access_token_result):
 		return {"access_token": access_token_result["access_token"], "uids": access_token_result["user_id"], "fields": "uid, first_name, last_name, nickname, screen_name, sex, bdate, city, country, photo, photo_medium, photo_big"}
+		
+	def process_user_info_response(self, request, user_info_response):
+		result = {}
+		user_info_response = user_info_response["response"][0]
+		print user_info_response
+		result["id"] = user_info_response["uid"]
+		result["firstname"] = user_info_response["first_name"]
+		result["lastname"] = user_info_response["last_name"]
+		return result
 
 	
 class FacebookAuthBackend(AuthBackend):
 	def prepare_access_token_response(self, response):
 		return url_decode(response)
+		
+	def process_user_info_response(self, request, user_info_response):
+		result = {}
+		print user_info_response
+		result["id"] = user_info_response["id"]
+		result["email"] = user_info_response["email"]
+		result["firstname"] = user_info_response["first_name"]
+		result["lastname"] = user_info_response["last_name"]
+		return result
 
 
 class AuthController(object):
@@ -118,7 +139,7 @@ class AuthController(object):
 			if "redirect_uri" in params:
 				params["redirect_uri"] = urljoin(base_uri, params["redirect_uri"])
 		return {
-			str_url_regex("backend"): {
+			Regex.string_url_regex("backend"): {
 				"": StartAuthController,
 				"callback": EndAuthController,
 			}
