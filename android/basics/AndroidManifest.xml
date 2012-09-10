@@ -54,6 +54,10 @@
             android:name=".DbActivity"
             android:label="Db" >
         </activity>
+        <activity 
+            android:name=".TileMenuActivity"
+            android:label="TileMenu" >
+        </activity>
         <provider 
             android:name=".MyContentProvider"
             android:authorities="feldman.samples.android.MyContentProvider"/>
