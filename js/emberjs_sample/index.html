@@ -1,0 +1,41 @@
+<!doctype html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Ember.js Sample</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="jquery.js"></script>
+  <script src="handlebars.js"></script>
+  <script src="ember.js"></script>
+  <script src="app.js"></script>
+</head>
+<body>
+  <script type="text/x-handlebars" data-template-name="greet_tmpl">
+    <h1>Hello {{name}}!</h1>
+    {{#if is_register}}
+      <div>you are registered</div>
+      {{#unless is_login}}
+        <div>hey, you are not logged in!</div>
+      {{/unless}}
+      <div {{bindAttr disabled="is_disabled"}}></div>
+      <a href="#" {{action "edit" on="click"}}>click me</a>
+    {{else}}
+      <div>you are not registered</div>
+    {{/if}}
+    <ul class="people_list">
+      {{#each people}}
+        <li>{{this}}</li>
+      {{/each}}
+    </ul>
+    {{#each App.personController.content}}
+       <div>name: {{name}}; age: {{age}}</div>
+    {{/each}}
+  </script>
+  <div id="container"></div>
+  <script type="text/x-handlebars">
+    {{#view App.MyView}}
+      <h1>Hello {{App.greet}}!</h1>
+    {{/view}}
+  </script>
+</body>
+</html>
