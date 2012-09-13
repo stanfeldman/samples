@@ -14,7 +14,7 @@
 <body>
   <script type="text/x-handlebars" data-template-name="application">
     <div data-role="header">
-      <h1>Ember commiters</h1>
+      <h1>{{outlet header}}</h1>
     </div>
     <div data-role="content">
       {{outlet}}
@@ -27,8 +27,14 @@
       {{/each}}
     </ul>
   </script>
+  <script type="text/x-handlebars" data-template-name="contributors_header">
+    All Contributors
+  </script>
   <script type="text/x-handlebars" data-template-name="a-contributor">
     {{login}} - {{contributions}} contributions to Ember.js
+  </script>
+  <script type="text/x-handlebars" data-template-name="a-contributor_header">
+    Contributor {{login}}
   </script>
 </body>
 </html>

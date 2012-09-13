@@ -21,7 +21,6 @@ window.App = Ember.Application.create({
 	ready: function(){
 		console.log("ember initializing...");
 		this.initialize();
-		$("#contributors_list").listview();
 		console.log("ember initialized.");
 	}
 });
@@ -30,17 +29,9 @@ App.Contributor = Ember.Object.extend();
 App.Contributor.reopenClass({
 	allContributors: [],
 	find: function(){
-		if(this.allContributors.length > 0){
-			var context = this;
-			Ember.run.next(function() {
-				var last = context.allContributors[context.allContributors.length-1];
-				if(last){
-					context.allContributors.removeObject(last);
-					context.allContributors.addObject(last);
-				}
-	        });
-			return this.allContributors;
-		}
+		var self = this;
+		if(self.allContributors.length > 0)
+			return self.allContributors;
 		$.ajax({
 			url: 'https://api.github.com/repos/emberjs/ember.js/contributors',
 	     	dataType: 'jsonp',
@@ -51,6 +42,9 @@ App.Contributor.reopenClass({
 	        	}, this);
 	    	}
 	    });
+		/*Ember.run.next(function() {
+			self.allContributors.addObject(App.Contributor.create({login: "vasya"}));
+        });*/
 	    return this.allContributors;
 	},
 	findOne: function(username){
@@ -69,23 +63,31 @@ App.Contributor.reopenClass({
 //conrollers********************************************
 App.AllContributorsController = Ember.ArrayController.extend({
 	contentLengthDidChange: function(){
-        Ember.run.later(function() {
-        	try {
-            	$("#contributors_list").listview('refresh');
-            }
-            catch(e){
-            	$("#contributors_list").listview();	
-            }
-        }, 10);//some magic, next doesn't work
-    }.observes('content.length')
+        Ember.run.next(function() {
+        	$("#contributors_list").listview('refresh');
+        });
+    }.observes('content.@each')
 });
+App.AllContributorsHeaderController = Ember.Controller.extend();
+
 App.OneContributorController = Ember.ObjectController.extend();
+App.OneContributorHeaderController = Ember.ObjectController.extend();
 //views**************************************************
 App.AllContributorsView = Ember.View.extend({
 	templateName: "contributors",
+	didInsertElement: function(){
+		$("#contributors_list").listview();
+	}
 });
+App.AllContributorsHeaderView = Ember.View.extend({
+	templateName: "contributors_header",
+});
+
 App.OneContributorView = Ember.View.extend({
 	templateName: "a-contributor"
+});
+App.OneContributorHeaderView = Ember.View.extend({
+	templateName: "a-contributor_header"
 });
 //router**************************************************
 App.Router = Ember.Router.extend({
@@ -96,12 +98,14 @@ App.Router = Ember.Router.extend({
 			showContributor: Ember.Route.transitionTo("aContributor"),
 			connectOutlets: function(router){
 				router.get("applicationController").connectOutlet("allContributors", App.Contributor.find());
+				router.get("applicationController").connectOutlet("header", "allContributorsHeader");
 			}
 		}),
 		aContributor: Ember.Route.extend({
 			route: "/:username",
 			connectOutlets: function(router, contributor){
 				router.get("applicationController").connectOutlet("oneContributor", contributor);
+				router.get("applicationController").connectOutlet("header", "oneContributorHeader", contributor);
 			},
 			serialize: function(router, context){
 				return {username: context.get("login")}
