@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<script src="stash.js"></script>
+		<script src="store.js"></script>
+		<script>
+			function test(storage){
+				console.log(storage);
+				storage.set('username', 'marcus');
+				console.log(storage.get('username'));
+				//storage.remove('username');
+				//storage.clear();
+				storage.set('user', { name: 'marcus', likes: 'javascript', arr:[1, 2, 3], d: new Date(), b: true, age: 24 });
+				storage.set("user", { is_super: true});
+				var user = storage.get('user');
+				console.log(user);
+			}
+			//store.js
+			test(store);
+			test(stash);
+		</script>
+	</head>
+	<body></body>
+</html>

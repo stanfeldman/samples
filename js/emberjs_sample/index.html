@@ -12,12 +12,13 @@
 <body>
   <script type="text/x-handlebars" data-template-name="greet_tmpl">
     <h1>Hello {{name}}!</h1>
+    <h2>hello2 {{name}}</h2>
     {{#if is_register}}
       <div>you are registered</div>
       {{#unless is_login}}
         <div>hey, you are not logged in!</div>
       {{/unless}}
-      <div {{bindAttr disabled="is_disabled"}}></div>
+      <div {{bindAttr class="is_disabled"}}>attr binding</div>
       <a href="#" {{action "edit" on="click"}}>click me</a>
     {{else}}
       <div>you are not registered</div>

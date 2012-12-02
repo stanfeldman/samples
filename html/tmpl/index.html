@@ -1,0 +1,108 @@
+<html>
+	<head>
+		<script src="metamorph.js"></script>
+		<script src="handlebars.js"></script>
+		<script src="jquery.js"></script>
+		<script data-name="simple" type="text/x-template">
+			hello, {{name}}!
+		</script>
+		<script data-name="base" type="text/x-template">
+			base header
+			{{#block "content"}}
+				base content({{name}})
+			{{/block}}
+			base footer
+		</script>
+		<script data-name="child" type="text/x-template">
+			{{#override "content"}}
+				{{>content}}
+				child content ({{name}} 2)
+			{{/override}}
+    		{{extend "base"}}
+		</script>
+		<script data-name="grandchild" type="text/x-template">
+			{{#override "content"}}
+				{{>content}}
+				grandchild content ({{name}} 3)
+			{{/override}}
+    		{{extend "child"}}
+		</script>
+		<script>
+			$(document).ready(function(){
+				var templates = {};
+				Handlebars.loadPartial = function loadPartial(name) {
+				    var partial = Handlebars.partials[name];
+				    if (typeof partial === "string") {
+				        partial = Handlebars.compile(partial);
+				        Handlebars.partials[name] = partial;
+				    }
+				    return partial;
+				};
+				var renderInherited = function renderInherited(context, name, saved, child, parent) {
+				    Handlebars.registerPartial(name, parent);
+				    var out = child(context);
+				    Handlebars.registerPartial(name, saved);
+				    return out;
+				};
+				Handlebars.registerHelper("override", function override(name, options) {
+				    /* Would be nice to extend Handlebars so that the blocks dictionary would reset at every top-level instantiation, or better yet, pass it around in the options (instead of using a module-level variable). To avoid such invasion, though, we check to initialize before every use, and clear after all uses finished. */
+				    var blocks = Handlebars.blocks = Handlebars.blocks || Object.create(null);
+				    var override = blocks[name];
+				    var parent = options.fn;
+				    if (override) {
+				        var wrapper = function wrapper(context) {
+				            var grandparent = Handlebars.loadPartial(name);
+				            var parentWrapper = function parentWrapper(subcontext) {
+				                return renderInherited(/*context=*/subcontext, name,
+				                                       /*saved=*/parentWrapper,
+				                                       /*child=*/parent,
+				                                       /*parent=*/grandparent);
+				            };
+				            return renderInherited(context, name,
+				                                   /*saved=*/grandparent,
+				                                   /*child=*/override,
+				                                   /*parent=*/parentWrapper);
+				        };
+				    } else {
+				        var wrapper = parent;
+				    }
+				    blocks[name] = wrapper;
+				});
+				Handlebars.registerHelper("block", function block(name, options) {
+				    var blocks = Handlebars.blocks = Handlebars.blocks || Object.create(null);
+				    var override = blocks[name];
+				    if (override) {
+				        /* We let templates include parent blocks with regular partials---e.g., `{{> parent}}`---but we cannot "store" the blocks as partials - we have to discriminate between blocks and partials so that we can clear the former but not the latter at the end of every top-level instantiation. */
+				        var out = renderInherited(/*context=*/this, name,
+				                                  /*saved=*/undefined,
+				                                  /*child=*/override,
+				                                  /*parent=*/options.fn);
+				    } else {
+				        var out = options.fn(this);
+				    }
+
+				    return out;
+				});
+				Handlebars.registerHelper("extend", function extend(name) {
+				    var base = Handlebars.loadPartial(name);
+				    var out = base(this);
+				    delete Handlebars.blocks;
+				    return new Handlebars.SafeString(out);
+				});
+				$('script[type="text/x-template"]').each(function(index, item){
+					var el = $(item);
+					var name = el.attr("data-name");
+					var source = el.html();
+					var compiled = Handlebars.compile(source);
+					Handlebars.registerPartial(name, compiled);
+					templates[name] = compiled;
+				});
+				console.time("render");
+				//console.log(templates.simple({name: "stas"}));
+				//console.log(templates.child({name: "boris"}));
+				console.log(templates.grandchild({name: "boris"}));
+				console.timeEnd("render");
+			});
+		</script>
+	</head>
+</html>
