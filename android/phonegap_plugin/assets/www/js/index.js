@@ -14,6 +14,8 @@ var app = {
         }, function(err){
             console.log("error Plugin1.first: " + err);
         });
+        //window.plugins.statusBarNotification.notify("Put your title here", "Put your message here");
+        Notifier.show("test_not", "Put your title here", "Put your message here");
     },
     report: function(id) { 
         console.log("report:" + id);

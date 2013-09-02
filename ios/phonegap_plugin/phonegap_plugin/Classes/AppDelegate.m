@@ -132,4 +132,15 @@
 	[super dealloc];
 }
 
+// ADD OUR NOTIFICATION CODE
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    UIApplicationState state = [application applicationState];
+    if (state != UIApplicationStateActive) {
+        NSString *notID = [notification.userInfo objectForKey:@"id"];
+        NSLog(@"caugt notification click, %@", notID);
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Notifier" object:notID];
+    }
+}
+
 @end

@@ -26,6 +26,10 @@
 	<array/>
 	<key>Plugins</key>
 	<dict>
+		<key>Notifier</key>
+		<string>Notifier</string>
+		<key>LocalNotification</key>
+		<string>LocalNotification</string>
 		<key>Plugin1</key>
 		<string>Plugin1</string>
 		<key>Device</key>

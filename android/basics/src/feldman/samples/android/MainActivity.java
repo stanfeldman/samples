@@ -43,6 +43,6 @@ public class MainActivity extends Activity
 	private String samples [] = {
 			"TileMenu", "LifeCycle", "Touch", "Assets", 
 			"ExternalStorage", "RenderView", "Shape", 
-			"Bitmap", "SurfaceView", "Prefs", "Db"
+			"Bitmap", "SurfaceView", "Prefs", "Db", "Mail"
 	};
 }

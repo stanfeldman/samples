@@ -43,7 +43,9 @@
 		30A0434914DC770100060A13 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 30A0434614DC770100060A13 /* Localizable.strings */; };
 		30E1352710E2C1420031B30D /* Cordova.plist in Resources */ = {isa = PBXBuildFile; fileRef = 30E1352610E2C1420031B30D /* Cordova.plist */; };
 		30E5649213A7FCAF007403D8 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30E5649113A7FCAF007403D8 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		F046911C166B2706003260B7 /* Plugin1.m in Sources */ = {isa = PBXBuildFile; fileRef = F046911B166B2706003260B7 /* Plugin1.m */; };
+		F0ECED1B1675BDDA00574B21 /* LocalNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = F0ECED1A1675BDDA00574B21 /* LocalNotification.m */; };
+		F0ECED1E1675BEA700574B21 /* Plugin1.m in Sources */ = {isa = PBXBuildFile; fileRef = F0ECED1D1675BEA700574B21 /* Plugin1.m */; };
+		F0ECED211675DEFE00574B21 /* Notifier.m in Sources */ = {isa = PBXBuildFile; fileRef = F0ECED201675DEFE00574B21 /* Notifier.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,8 +122,12 @@
 		30E5649113A7FCAF007403D8 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* phonegap_plugin-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "phonegap_plugin-Prefix.pch"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* phonegap_plugin-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "phonegap_plugin-Info.plist"; path = "../phonegap_plugin-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
-		F046911A166B2706003260B7 /* Plugin1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Plugin1.h; sourceTree = "<group>"; };
-		F046911B166B2706003260B7 /* Plugin1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Plugin1.m; sourceTree = "<group>"; };
+		F0ECED191675BDDA00574B21 /* LocalNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalNotification.h; sourceTree = "<group>"; };
+		F0ECED1A1675BDDA00574B21 /* LocalNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalNotification.m; sourceTree = "<group>"; };
+		F0ECED1C1675BEA700574B21 /* Plugin1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Plugin1.h; sourceTree = "<group>"; };
+		F0ECED1D1675BEA700574B21 /* Plugin1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Plugin1.m; sourceTree = "<group>"; };
+		F0ECED201675DEFE00574B21 /* Notifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Notifier.m; sourceTree = "<group>"; };
+		F0ECED221675E81800574B21 /* Notifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Notifier.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,8 +164,6 @@
 				302D95F014D2391D003F00A1 /* MainViewController.xib */,
 				1D3623240D0F684500981E51 /* AppDelegate.h */,
 				1D3623250D0F684500981E51 /* AppDelegate.m */,
-				F046911A166B2706003260B7 /* Plugin1.h */,
-				F046911B166B2706003260B7 /* Plugin1.m */,
 			);
 			name = Classes;
 			path = phonegap_plugin/Classes;
@@ -267,6 +271,12 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				F0ECED221675E81800574B21 /* Notifier.h */,
+				F0ECED201675DEFE00574B21 /* Notifier.m */,
+				F0ECED1C1675BEA700574B21 /* Plugin1.h */,
+				F0ECED1D1675BEA700574B21 /* Plugin1.m */,
+				F0ECED191675BDDA00574B21 /* LocalNotification.h */,
+				F0ECED1A1675BDDA00574B21 /* LocalNotification.m */,
 			);
 			name = Plugins;
 			path = phonegap_plugin/Plugins;
@@ -447,7 +457,9 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
-				F046911C166B2706003260B7 /* Plugin1.m in Sources */,
+				F0ECED1B1675BDDA00574B21 /* LocalNotification.m in Sources */,
+				F0ECED1E1675BEA700574B21 /* Plugin1.m in Sources */,
+				F0ECED211675DEFE00574B21 /* Notifier.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

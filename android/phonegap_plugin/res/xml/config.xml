@@ -50,6 +50,8 @@
     <plugin name="Battery" value="org.apache.cordova.BatteryListener"/>
     <plugin name="SplashScreen" value="org.apache.cordova.SplashScreen"/>
     <plugin name="Plugin1" value="ru.limehat.samples.android.phonegap_plugin.Plugin1"/>
+    <plugin name="StatusBarNotification" value="com.phonegap.plugins.statusBarNotification.StatusBarNotification"/>
+    <plugin name="Notifier" value="ru.limehat.samples.android.notifier.Notifier"/>
 </plugins>
 </cordova>
 
