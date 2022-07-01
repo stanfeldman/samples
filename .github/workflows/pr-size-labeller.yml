@@ -22,4 +22,4 @@ jobs:
           fail_if_xl: "false"
           message_if_xl: >
             This PR is more than 500 lines. Please make sure you are NOT addressing multiple issues in one PR.
-          files_to_ignore: "graphql.generated.ts"
+          files_to_ignore: "*.generated.ts"
