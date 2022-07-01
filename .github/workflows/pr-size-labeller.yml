@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Estimate PR size
     steps:
-      - uses: stanfeldman/pr-size-labeler@main
+      - uses: stanfeldman/pr-size-labeler@regex
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           xs_label: "size/XS"
@@ -22,4 +22,4 @@ jobs:
           fail_if_xl: "false"
           message_if_xl: >
             This PR is more than 500 lines. Please make sure you are NOT addressing multiple issues in one PR.
-          files_to_ignore: "graphql.generated.ts"
+          files_to_ignore: ".generated."
